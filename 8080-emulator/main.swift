@@ -10,58 +10,62 @@ import Foundation
 
 let byteSize = MemoryLayout<UInt8>.size
 
-var conditionBits = [
-  "carry": false,
-  "auxiliaryCarry": false,
-  "sign": false,
-  "zero": false,
-  "parity": false
-]
+struct ConditionBits {
+  var carry = false
+  var auxiliaryCarry = false
+  var sign = false
+  var zero = false
+  var parity = false
 
-var registers = [
-  "b": UInt8(),
-  "c": UInt8(),
-  "d": UInt8(),
-  "e": UInt8(),
-  "h": UInt8(),
-  "l": UInt8(),
-  "a": UInt8()
-]
+}
+
+struct Registers {
+  var b = UInt8()
+  var c = UInt8()
+  var d = UInt8()
+  var e = UInt8()
+  var h = UInt8()
+  var l = UInt8()
+  var a = UInt8()
+}
+
+var conditionBits = ConditionBits()
+var registers = Registers()
 
 struct RegisterPairs {
   var b: (UInt8, UInt8) {
     get {
-      return (registers["b"]!, registers["c"]!)
+      return (registers.b, registers.c)
     }
     set {
-      registers["b"] = newValue.0
-      registers["c"] = newValue.1
+      registers.b = newValue.0
+      registers.c = newValue.1
     }
   }
   var d: (UInt8, UInt8) {
     get {
-      return (registers["d"]!, registers["e"]!)
+      return (registers.d, registers.e)
     }
     set {
-      registers["d"] = newValue.0
-      registers["e"] = newValue.1
+      registers.d = newValue.0
+      registers.e = newValue.1
     }
   }
   var h: (UInt8, UInt8) {
     get {
-      return (registers["h"]!, registers["l"]!)
+      return (registers.h, registers.l)
     }
     set {
-      registers["h"] = newValue.0
-      registers["l"] = newValue.1
+      registers.h = newValue.0
+      registers.l = newValue.1
     }
   }
-  var psw: (UInt8, [String: Bool]) {
+  var psw: (UInt8, ConditionBits) {
     get {
-      return (registers["a"]!, conditionBits)
+      return (registers.a, conditionBits)
     }
     set {
-      registers["a"] = newValue.0
+      registers.a = newValue.0
       conditionBits = newValue.1
     }
   }
