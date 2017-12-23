@@ -48,6 +48,16 @@ struct Registers {
   var h = UInt8()
   var l = UInt8()
   var a = UInt8()
+
+  var m: UInt16 {
+    get {
+      return UInt16(self.h) << 8 + UInt16(self.l)
+    }
+    set {
+      self.h = UInt8((newValue & 0xFF00) >> 8)
+      self.l = UInt8(newValue & 0x00FF)
+    }
+  }
 }
 
 var conditionBits = ConditionBits()
@@ -122,7 +132,7 @@ func nop() { programCounter += 1 }
 // Dummy values for testing
 memory = Data(bytes: [0x81])
 registers.a = 0x2E
-registers.b = 0x6C
+registers.m = 0x3A7C
 
 while true {
   let range = NSRange(location: Int(programCounter), length: byteSize)
