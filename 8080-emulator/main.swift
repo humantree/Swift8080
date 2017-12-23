@@ -8,15 +8,36 @@
 
 import Foundation
 
+let auxiliaryCarryThreshold =
+  UInt8(Float(UINT8_MAX).squareRoot().rounded())
 let byteSize = MemoryLayout<UInt8>.size
 
 struct ConditionBits {
-  var carry = false
   var auxiliaryCarry = false
+  var carry = false
+  var parity = false
   var sign = false
   var zero = false
-  var parity = false
 
+  mutating func setParity(_ byte: UInt8) {
+    var byte = byte
+    var count = 0
+
+    for _ in 0..<8 {
+      if byte & 0x01 == 1 { count += 1 }
+      byte >>= 1
+    }
+
+    parity = count % 2 == 0
+  }
+
+  mutating func setSign(_ byte: UInt8) {
+    sign = byte & 0x80 != 0
+  }
+
+  mutating func setZero(_ byte: UInt8) {
+    zero = byte == 0
+  }
 }
 
 struct Registers {
@@ -83,10 +104,25 @@ func unimplementedInstruction(instruction: UInt8) {
   exit(1)
 }
 
+func add(_ addend: UInt8) {
+  let result = UInt16(registers.a) + UInt16(addend)
+  registers.a = UInt8(result & 0xFF)
+
+  conditionBits.auxiliaryCarry = result >= auxiliaryCarryThreshold
+  conditionBits.carry = result > registers.a
+  conditionBits.setSign(registers.a)
+  conditionBits.setParity(registers.a)
+  conditionBits.setZero(registers.a)
+
+  programCounter += 1
+}
+
 func nop() { programCounter += 1 }
 
-// Dummy memory value for testing
-memory = Data(bytes: [0x00])
+// Dummy values for testing
+memory = Data(bytes: [0x81])
+registers.a = 0x2E
+registers.b = 0x6C
 
 while true {
   let range = NSRange(location: Int(programCounter), length: byteSize)
@@ -224,14 +260,14 @@ while true {
   case 0x7D: unimplementedInstruction(instruction: byte)
   case 0x7E: unimplementedInstruction(instruction: byte)
   case 0x7F: unimplementedInstruction(instruction: byte)
-  case 0x80: unimplementedInstruction(instruction: byte)
-  case 0x81: unimplementedInstruction(instruction: byte)
-  case 0x82: unimplementedInstruction(instruction: byte)
-  case 0x83: unimplementedInstruction(instruction: byte)
-  case 0x84: unimplementedInstruction(instruction: byte)
-  case 0x85: unimplementedInstruction(instruction: byte)
+  case 0x80: add(registers.b)
+  case 0x81: add(registers.c)
+  case 0x82: add(registers.d)
+  case 0x83: add(registers.e)
+  case 0x84: add(registers.h)
+  case 0x85: add(registers.l)
   case 0x86: unimplementedInstruction(instruction: byte)
-  case 0x87: unimplementedInstruction(instruction: byte)
+  case 0x87: add(registers.a)
   case 0x88: unimplementedInstruction(instruction: byte)
   case 0x89: unimplementedInstruction(instruction: byte)
   case 0x8A: unimplementedInstruction(instruction: byte)
