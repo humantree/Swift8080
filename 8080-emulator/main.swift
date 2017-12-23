@@ -12,6 +12,8 @@ let auxiliaryCarryThreshold =
   UInt8(Float(UINT8_MAX).squareRoot().rounded())
 let byteSize = MemoryLayout<UInt8>.size
 
+var memory = Data()
+
 struct ConditionBits {
   var auxiliaryCarry = false
   var carry = false
@@ -49,14 +51,13 @@ struct Registers {
   var l = UInt8()
   var a = UInt8()
 
-  var m: UInt16 {
-    get {
-      return UInt16(self.h) << 8 + UInt16(self.l)
-    }
-    set {
-      self.h = UInt8((newValue & 0xFF00) >> 8)
-      self.l = UInt8(newValue & 0x00FF)
-    }
+  private var mAddress: Int {
+    get { return Int(UInt16(self.h) << 8 + UInt16(self.l)) }
+  }
+
+  var m: UInt8 {
+    get { return memory[mAddress] }
+    set { memory[mAddress] = newValue }
   }
 }
 
@@ -103,8 +104,6 @@ struct RegisterPairs {
 }
 
 var registerPairs = RegisterPairs()
-
-var memory = Data()
 var programCounter = UInt16()
 var stackPointer = UInt16()
 
@@ -130,9 +129,10 @@ func add(_ addend: UInt8) {
 func nop() { programCounter += 1 }
 
 // Dummy values for testing
-memory = Data(bytes: [0x81])
-registers.a = 0x2E
-registers.m = 0x3A7C
+memory = Data(bytes: [0x86, 0xF0])
+registers.a = 0x0F
+registers.h = 0x00
+registers.l = 0x01
 
 while true {
   let range = NSRange(location: Int(programCounter), length: byteSize)
@@ -276,7 +276,7 @@ while true {
   case 0x83: add(registers.e)
   case 0x84: add(registers.h)
   case 0x85: add(registers.l)
-  case 0x86: unimplementedInstruction(instruction: byte)
+  case 0x86: add(registers.m)
   case 0x87: add(registers.a)
   case 0x88: unimplementedInstruction(instruction: byte)
   case 0x89: unimplementedInstruction(instruction: byte)
