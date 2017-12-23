@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		742244C61FEE222900B7C970 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244C51FEE222900B7C970 /* main.swift */; };
+		742244CE1FEF19CC00B7C970 /* CPUState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244CD1FEF19CC00B7C970 /* CPUState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		742244C21FEE222900B7C970 /* 8080-emulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "8080-emulator"; sourceTree = BUILT_PRODUCTS_DIR; };
 		742244C51FEE222900B7C970 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		742244CD1FEF19CC00B7C970 /* CPUState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 		742244C41FEE222900B7C970 /* 8080-emulator */ = {
 			isa = PBXGroup;
 			children = (
+				742244CD1FEF19CC00B7C970 /* CPUState.swift */,
 				742244C51FEE222900B7C970 /* main.swift */,
 			);
 			path = "8080-emulator";
@@ -120,6 +123,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				742244CE1FEF19CC00B7C970 /* CPUState.swift in Sources */,
 				742244C61FEE222900B7C970 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
