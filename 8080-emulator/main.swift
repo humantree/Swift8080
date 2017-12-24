@@ -16,9 +16,15 @@ func unimplementedInstruction(instruction: UInt8) {
   exit(1)
 }
 
-func add(_ addend: UInt8) {
-  let halfByteResult = registers.a & 0xF + addend & 0xF
-  let result = UInt16(registers.a) + UInt16(addend)
+func add(_ addend: UInt8, carry: Bool = false) {
+  var halfByteResult = registers.a & 0xF + addend & 0xF
+  var result = UInt16(registers.a) + UInt16(addend)
+
+  if carry {
+    halfByteResult += UInt8(conditionBits.carry.hashValue)
+    result += UInt16(conditionBits.carry.hashValue)
+  }
+
   registers.a = UInt8(result & 0xFF)
 
   conditionBits.auxiliaryCarry = halfByteResult & 0x10 == 0x10
@@ -33,9 +39,10 @@ func add(_ addend: UInt8) {
 func nop() { programCounter += 1 }
 
 // Dummy values for testing
-memory = Data(bytes: [0x80, 0x01])
-registers.a = 0x76
-registers.b = 0x0D
+memory = Data(bytes: [0x88, 0x01])
+registers.a = 0x3D
+registers.b = 0x42
+conditionBits.carry = true
 
 while true {
   let range = NSRange(location: Int(programCounter), length: byteSize)
@@ -181,14 +188,14 @@ while true {
   case 0x85: add(registers.l)
   case 0x86: add(registers.m)
   case 0x87: add(registers.a)
-  case 0x88: unimplementedInstruction(instruction: byte)
-  case 0x89: unimplementedInstruction(instruction: byte)
-  case 0x8A: unimplementedInstruction(instruction: byte)
-  case 0x8B: unimplementedInstruction(instruction: byte)
-  case 0x8C: unimplementedInstruction(instruction: byte)
-  case 0x8D: unimplementedInstruction(instruction: byte)
-  case 0x8E: unimplementedInstruction(instruction: byte)
-  case 0x8F: unimplementedInstruction(instruction: byte)
+  case 0x88: add(registers.b, carry: true)
+  case 0x89: add(registers.c, carry: true)
+  case 0x8A: add(registers.d, carry: true)
+  case 0x8B: add(registers.e, carry: true)
+  case 0x8C: add(registers.h, carry: true)
+  case 0x8D: add(registers.l, carry: true)
+  case 0x8E: add(registers.m, carry: true)
+  case 0x8F: add(registers.a, carry: true)
   case 0x90: unimplementedInstruction(instruction: byte)
   case 0x91: unimplementedInstruction(instruction: byte)
   case 0x92: unimplementedInstruction(instruction: byte)
