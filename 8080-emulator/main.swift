@@ -8,7 +8,6 @@
 
 import Foundation
 
-let auxiliaryCarryThreshold = UInt8(Float(UINT8_MAX).squareRoot().rounded())
 let byteSize = MemoryLayout<UInt8>.size
 
 func unimplementedInstruction(instruction: UInt8) {
@@ -18,10 +17,11 @@ func unimplementedInstruction(instruction: UInt8) {
 }
 
 func add(_ addend: UInt8) {
+  let halfByteResult = registers.a & 0xF + addend & 0xF
   let result = UInt16(registers.a) + UInt16(addend)
   registers.a = UInt8(result & 0xFF)
 
-  conditionBits.auxiliaryCarry = result >= auxiliaryCarryThreshold
+  conditionBits.auxiliaryCarry = halfByteResult & 0x10 == 0x10
   conditionBits.carry = result > registers.a
   conditionBits.setSign(registers.a)
   conditionBits.setParity(registers.a)
@@ -33,10 +33,9 @@ func add(_ addend: UInt8) {
 func nop() { programCounter += 1 }
 
 // Dummy values for testing
-memory = Data(bytes: [0x86, 0xF0])
-registers.a = 0x0F
-registers.h = 0x00
-registers.l = 0x01
+memory = Data(bytes: [0x80, 0x01])
+registers.a = 0x76
+registers.b = 0x0D
 
 while true {
   let range = NSRange(location: Int(programCounter), length: byteSize)
