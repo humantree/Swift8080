@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:8080-emulator.xcodeproj">
+      location = "self:Swift8080.xcodeproj">
    </FileRef>
 </Workspace>

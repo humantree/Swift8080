@@ -29,11 +29,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		742244C21FEE222900B7C970 /* 8080-emulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "8080-emulator"; sourceTree = BUILT_PRODUCTS_DIR; };
+		742244C21FEE222900B7C970 /* Swift8080 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Swift8080; sourceTree = BUILT_PRODUCTS_DIR; };
 		742244C51FEE222900B7C970 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		742244CD1FEF19CC00B7C970 /* CPUState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUState.swift; sourceTree = "<group>"; };
 		742244CF1FF22D3400B7C970 /* CPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPU.swift; sourceTree = "<group>"; };
-		742244D71FF231BD00B7C970 /* 8080-emulatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "8080-emulatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		742244D71FF231BD00B7C970 /* Swift8080Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Swift8080Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		742244DB1FF231BD00B7C970 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		742244DF1FF2325700B7C970 /* CPUTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -59,8 +59,8 @@
 		742244B91FEE222900B7C970 = {
 			isa = PBXGroup;
 			children = (
-				742244C41FEE222900B7C970 /* 8080-emulator */,
-				742244D81FF231BD00B7C970 /* 8080-emulatorTests */,
+				742244C41FEE222900B7C970 /* Swift8080 */,
+				742244D81FF231BD00B7C970 /* Swift8080Tests */,
 				742244C31FEE222900B7C970 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,37 +68,37 @@
 		742244C31FEE222900B7C970 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				742244C21FEE222900B7C970 /* 8080-emulator */,
-				742244D71FF231BD00B7C970 /* 8080-emulatorTests.xctest */,
+				742244C21FEE222900B7C970 /* Swift8080 */,
+				742244D71FF231BD00B7C970 /* Swift8080Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		742244C41FEE222900B7C970 /* 8080-emulator */ = {
+		742244C41FEE222900B7C970 /* Swift8080 */ = {
 			isa = PBXGroup;
 			children = (
 				742244CD1FEF19CC00B7C970 /* CPUState.swift */,
 				742244CF1FF22D3400B7C970 /* CPU.swift */,
 				742244C51FEE222900B7C970 /* main.swift */,
 			);
-			path = "8080-emulator";
+			path = Swift8080;
 			sourceTree = "<group>";
 		};
-		742244D81FF231BD00B7C970 /* 8080-emulatorTests */ = {
+		742244D81FF231BD00B7C970 /* Swift8080Tests */ = {
 			isa = PBXGroup;
 			children = (
 				742244DB1FF231BD00B7C970 /* Info.plist */,
 				742244DF1FF2325700B7C970 /* CPUTests.swift */,
 			);
-			path = "8080-emulatorTests";
+			path = Swift8080Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		742244C11FEE222900B7C970 /* 8080-emulator */ = {
+		742244C11FEE222900B7C970 /* Swift8080 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 742244C91FEE222900B7C970 /* Build configuration list for PBXNativeTarget "8080-emulator" */;
+			buildConfigurationList = 742244C91FEE222900B7C970 /* Build configuration list for PBXNativeTarget "Swift8080" */;
 			buildPhases = (
 				742244BE1FEE222900B7C970 /* Sources */,
 				742244BF1FEE222900B7C970 /* Frameworks */,
@@ -108,14 +108,14 @@
 			);
 			dependencies = (
 			);
-			name = "8080-emulator";
+			name = Swift8080;
 			productName = "8080-emulator";
-			productReference = 742244C21FEE222900B7C970 /* 8080-emulator */;
+			productReference = 742244C21FEE222900B7C970 /* Swift8080 */;
 			productType = "com.apple.product-type.tool";
 		};
-		742244D61FF231BD00B7C970 /* 8080-emulatorTests */ = {
+		742244D61FF231BD00B7C970 /* Swift8080Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 742244DC1FF231BD00B7C970 /* Build configuration list for PBXNativeTarget "8080-emulatorTests" */;
+			buildConfigurationList = 742244DC1FF231BD00B7C970 /* Build configuration list for PBXNativeTarget "Swift8080Tests" */;
 			buildPhases = (
 				742244D31FF231BD00B7C970 /* Sources */,
 				742244D41FF231BD00B7C970 /* Frameworks */,
@@ -125,9 +125,9 @@
 			);
 			dependencies = (
 			);
-			name = "8080-emulatorTests";
+			name = Swift8080Tests;
 			productName = "8080-emulatorTests";
-			productReference = 742244D71FF231BD00B7C970 /* 8080-emulatorTests.xctest */;
+			productReference = 742244D71FF231BD00B7C970 /* Swift8080Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -151,7 +151,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 742244BD1FEE222900B7C970 /* Build configuration list for PBXProject "8080-emulator" */;
+			buildConfigurationList = 742244BD1FEE222900B7C970 /* Build configuration list for PBXProject "Swift8080" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -163,8 +163,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				742244C11FEE222900B7C970 /* 8080-emulator */,
-				742244D61FF231BD00B7C970 /* 8080-emulatorTests */,
+				742244C11FEE222900B7C970 /* Swift8080 */,
+				742244D61FF231BD00B7C970 /* Swift8080Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -337,7 +337,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = S2DH54WNF7;
-				INFOPLIST_FILE = "8080-emulatorTests/Info.plist";
+				INFOPLIST_FILE = Swift8080Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "humantree.-080-emulatorTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -353,7 +353,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = S2DH54WNF7;
-				INFOPLIST_FILE = "8080-emulatorTests/Info.plist";
+				INFOPLIST_FILE = Swift8080Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "humantree.-080-emulatorTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -364,7 +364,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		742244BD1FEE222900B7C970 /* Build configuration list for PBXProject "8080-emulator" */ = {
+		742244BD1FEE222900B7C970 /* Build configuration list for PBXProject "Swift8080" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				742244C71FEE222900B7C970 /* Debug */,
@@ -373,7 +373,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		742244C91FEE222900B7C970 /* Build configuration list for PBXNativeTarget "8080-emulator" */ = {
+		742244C91FEE222900B7C970 /* Build configuration list for PBXNativeTarget "Swift8080" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				742244CA1FEE222900B7C970 /* Debug */,
@@ -382,7 +382,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		742244DC1FF231BD00B7C970 /* Build configuration list for PBXNativeTarget "8080-emulatorTests" */ = {
+		742244DC1FF231BD00B7C970 /* Build configuration list for PBXNativeTarget "Swift8080Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				742244DD1FF231BD00B7C970 /* Debug */,

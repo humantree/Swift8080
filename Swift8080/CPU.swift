@@ -1,6 +1,6 @@
 //
 //  CPU.swift
-//  8080-emulator
+//  Swift8080
 //
 //  Created by Christopher Oldfield on 12/26/17.
 //  Copyright © 2017 humantree. All rights reserved.

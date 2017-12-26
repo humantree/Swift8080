@@ -1,13 +1,13 @@
 //
 //  CPUTests.swift
-//  8080-emulatorTests
+//  Swift8080Tests
 //
 //  Created by Christopher Oldfield on 12/26/17.
 //  Copyright © 2017 humantree. All rights reserved.
 //
 
 import XCTest
-@testable import _080_emulator
+@testable import Swift8080
 
 class CPUTests: XCTestCase {
   let cpu = CPU()
