@@ -17,18 +17,18 @@ func unimplementedInstruction(instruction: UInt8) {
 }
 
 func add(_ addend: UInt8, carry: Bool = false) {
-  var halfByteResult = registers.a & 0xF + addend & 0xF
+  var nibbleResult = registers.a & 0xF + addend & 0xF
   var result = UInt16(registers.a) + UInt16(addend)
 
   if carry {
-    halfByteResult += UInt8(conditionBits.carry.hashValue)
+    nibbleResult += UInt8(conditionBits.carry.hashValue)
     result += UInt16(conditionBits.carry.hashValue)
   }
 
   registers.a = UInt8(result & 0xFF)
 
-  conditionBits.auxiliaryCarry = halfByteResult & 0x10 == 0x10
-  conditionBits.carry = result > registers.a
+  conditionBits.setAuxiliaryCarry(nibbleResult)
+  conditionBits.setCarry(registers.a, result)
   conditionBits.setSign(registers.a)
   conditionBits.setParity(registers.a)
   conditionBits.setZero(registers.a)
@@ -38,11 +38,25 @@ func add(_ addend: UInt8, carry: Bool = false) {
 
 func nop() { programCounter += 1 }
 
+func sub(_ subtrahend: UInt8) {
+  let twosComplementAddend = subtrahend & 0xF ^ 0xF
+  let nibbleResult = registers.a & 0xF + twosComplementAddend + 1
+  let result = UInt16(registers.a) &- UInt16(subtrahend)
+
+  registers.a = UInt8(result & 0xFF)
+
+  conditionBits.setAuxiliaryCarry(nibbleResult)
+  conditionBits.setCarry(registers.a, result)
+  conditionBits.setSign(registers.a)
+  conditionBits.setParity(registers.a)
+  conditionBits.setZero(registers.a)
+
+  programCounter += 1
+}
+
 // Dummy values for testing
-memory = Data(bytes: [0x88, 0x01])
-registers.a = 0x3D
-registers.b = 0x42
-conditionBits.carry = true
+memory = Data(bytes: [0x97, 0x01])
+registers.a = 0x3E
 
 while true {
   let range = NSRange(location: Int(programCounter), length: byteSize)
@@ -196,14 +210,14 @@ while true {
   case 0x8D: add(registers.l, carry: true)
   case 0x8E: add(registers.m, carry: true)
   case 0x8F: add(registers.a, carry: true)
-  case 0x90: unimplementedInstruction(instruction: byte)
-  case 0x91: unimplementedInstruction(instruction: byte)
-  case 0x92: unimplementedInstruction(instruction: byte)
-  case 0x93: unimplementedInstruction(instruction: byte)
-  case 0x94: unimplementedInstruction(instruction: byte)
-  case 0x95: unimplementedInstruction(instruction: byte)
-  case 0x96: unimplementedInstruction(instruction: byte)
-  case 0x97: unimplementedInstruction(instruction: byte)
+  case 0x90: sub(registers.b)
+  case 0x91: sub(registers.c)
+  case 0x92: sub(registers.d)
+  case 0x93: sub(registers.e)
+  case 0x94: sub(registers.h)
+  case 0x95: sub(registers.l)
+  case 0x96: sub(registers.m)
+  case 0x97: sub(registers.a)
   case 0x98: unimplementedInstruction(instruction: byte)
   case 0x99: unimplementedInstruction(instruction: byte)
   case 0x9A: unimplementedInstruction(instruction: byte)

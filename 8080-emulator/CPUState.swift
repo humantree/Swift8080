@@ -22,6 +22,14 @@ struct ConditionBits {
   var sign = false
   var zero = false
 
+  mutating func setAuxiliaryCarry(_ nibbleResult: UInt8) {
+    auxiliaryCarry = nibbleResult & 0x10 == 0x10
+  }
+
+  mutating func setCarry(_ result: UInt8, _ result16: UInt16) {
+    carry = result16 != result
+  }
+
   mutating func setParity(_ byte: UInt8) {
     var byte = byte
     var count = 0
