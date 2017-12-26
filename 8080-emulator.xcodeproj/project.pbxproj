@@ -10,6 +10,10 @@
 		742244C61FEE222900B7C970 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244C51FEE222900B7C970 /* main.swift */; };
 		742244CE1FEF19CC00B7C970 /* CPUState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244CD1FEF19CC00B7C970 /* CPUState.swift */; };
 		742244D01FF22D3400B7C970 /* CPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244CF1FF22D3400B7C970 /* CPU.swift */; };
+		742244E01FF2325700B7C970 /* CPUTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244DF1FF2325700B7C970 /* CPUTests.swift */; };
+		742244E11FF235DE00B7C970 /* CPUState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244CD1FEF19CC00B7C970 /* CPUState.swift */; };
+		742244E21FF235DE00B7C970 /* CPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244CF1FF22D3400B7C970 /* CPU.swift */; };
+		742244E31FF235DE00B7C970 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244C51FEE222900B7C970 /* main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,10 +33,20 @@
 		742244C51FEE222900B7C970 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		742244CD1FEF19CC00B7C970 /* CPUState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUState.swift; sourceTree = "<group>"; };
 		742244CF1FF22D3400B7C970 /* CPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPU.swift; sourceTree = "<group>"; };
+		742244D71FF231BD00B7C970 /* 8080-emulatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "8080-emulatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		742244DB1FF231BD00B7C970 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		742244DF1FF2325700B7C970 /* CPUTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		742244BF1FEE222900B7C970 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		742244D41FF231BD00B7C970 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -46,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				742244C41FEE222900B7C970 /* 8080-emulator */,
+				742244D81FF231BD00B7C970 /* 8080-emulatorTests */,
 				742244C31FEE222900B7C970 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				742244C21FEE222900B7C970 /* 8080-emulator */,
+				742244D71FF231BD00B7C970 /* 8080-emulatorTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -66,6 +82,15 @@
 				742244C51FEE222900B7C970 /* main.swift */,
 			);
 			path = "8080-emulator";
+			sourceTree = "<group>";
+		};
+		742244D81FF231BD00B7C970 /* 8080-emulatorTests */ = {
+			isa = PBXGroup;
+			children = (
+				742244DB1FF231BD00B7C970 /* Info.plist */,
+				742244DF1FF2325700B7C970 /* CPUTests.swift */,
+			);
+			path = "8080-emulatorTests";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -88,6 +113,23 @@
 			productReference = 742244C21FEE222900B7C970 /* 8080-emulator */;
 			productType = "com.apple.product-type.tool";
 		};
+		742244D61FF231BD00B7C970 /* 8080-emulatorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 742244DC1FF231BD00B7C970 /* Build configuration list for PBXNativeTarget "8080-emulatorTests" */;
+			buildPhases = (
+				742244D31FF231BD00B7C970 /* Sources */,
+				742244D41FF231BD00B7C970 /* Frameworks */,
+				742244D51FF231BD00B7C970 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "8080-emulatorTests";
+			productName = "8080-emulatorTests";
+			productReference = 742244D71FF231BD00B7C970 /* 8080-emulatorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -100,6 +142,11 @@
 				TargetAttributes = {
 					742244C11FEE222900B7C970 = {
 						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+					742244D61FF231BD00B7C970 = {
+						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -117,9 +164,20 @@
 			projectRoot = "";
 			targets = (
 				742244C11FEE222900B7C970 /* 8080-emulator */,
+				742244D61FF231BD00B7C970 /* 8080-emulatorTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		742244D51FF231BD00B7C970 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		742244BE1FEE222900B7C970 /* Sources */ = {
@@ -129,6 +187,17 @@
 				742244CE1FEF19CC00B7C970 /* CPUState.swift in Sources */,
 				742244C61FEE222900B7C970 /* main.swift in Sources */,
 				742244D01FF22D3400B7C970 /* CPU.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		742244D31FF231BD00B7C970 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				742244E11FF235DE00B7C970 /* CPUState.swift in Sources */,
+				742244E01FF2325700B7C970 /* CPUTests.swift in Sources */,
+				742244E31FF235DE00B7C970 /* main.swift in Sources */,
+				742244E21FF235DE00B7C970 /* CPU.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +330,37 @@
 			};
 			name = Release;
 		};
+		742244DD1FF231BD00B7C970 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = S2DH54WNF7;
+				INFOPLIST_FILE = "8080-emulatorTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "humantree.-080-emulatorTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		742244DE1FF231BD00B7C970 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = S2DH54WNF7;
+				INFOPLIST_FILE = "8080-emulatorTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "humantree.-080-emulatorTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -278,6 +378,15 @@
 			buildConfigurations = (
 				742244CA1FEE222900B7C970 /* Debug */,
 				742244CB1FEE222900B7C970 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		742244DC1FF231BD00B7C970 /* Build configuration list for PBXNativeTarget "8080-emulatorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				742244DD1FF231BD00B7C970 /* Debug */,
+				742244DE1FF231BD00B7C970 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
