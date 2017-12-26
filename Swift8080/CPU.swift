@@ -39,11 +39,16 @@ class CPU {
   
   private func nop() { programCounter += 1 }
   
-  private func sub(_ subtrahend: UInt8) {
+  private func sub(_ subtrahend: UInt8, borrow: Bool = false) {
     let twosComplementAddend = subtrahend & 0xF ^ 0xF
-    let nibbleResult = registers.a & 0xF + twosComplementAddend + 1
-    let result = UInt16(registers.a) &- UInt16(subtrahend)
-    
+    var nibbleResult = registers.a & 0xF + twosComplementAddend + 1
+    var result = UInt16(registers.a) &- UInt16(subtrahend)
+
+    if borrow {
+      nibbleResult -= UInt8(conditionBits.carry.hashValue)
+      result -= UInt16(conditionBits.carry.hashValue)
+    }
+
     registers.a = UInt8(result & 0xFF)
     
     conditionBits.setAuxiliaryCarry(nibbleResult)
@@ -216,14 +221,14 @@ class CPU {
       case 0x95: sub(registers.l)
       case 0x96: sub(registers.m)
       case 0x97: sub(registers.a)
-      case 0x98: unimplementedInstruction(instruction: byte)
-      case 0x99: unimplementedInstruction(instruction: byte)
-      case 0x9A: unimplementedInstruction(instruction: byte)
-      case 0x9B: unimplementedInstruction(instruction: byte)
-      case 0x9C: unimplementedInstruction(instruction: byte)
-      case 0x9D: unimplementedInstruction(instruction: byte)
-      case 0x9E: unimplementedInstruction(instruction: byte)
-      case 0x9F: unimplementedInstruction(instruction: byte)
+      case 0x98: sub(registers.b, borrow: true)
+      case 0x99: sub(registers.c, borrow: true)
+      case 0x9A: sub(registers.d, borrow: true)
+      case 0x9B: sub(registers.e, borrow: true)
+      case 0x9C: sub(registers.h, borrow: true)
+      case 0x9D: sub(registers.l, borrow: true)
+      case 0x9E: sub(registers.m, borrow: true)
+      case 0x9F: sub(registers.a, borrow: true)
       case 0xA0: unimplementedInstruction(instruction: byte)
       case 0xA1: unimplementedInstruction(instruction: byte)
       case 0xA2: unimplementedInstruction(instruction: byte)

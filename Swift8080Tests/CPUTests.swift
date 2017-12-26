@@ -29,8 +29,7 @@ class CPUTests: XCTestCase {
 
     cpu.start()
 
-    XCTAssertTrue(registers.a == 0x7F)
-
+    XCTAssertEqual(registers.a, 0x7F)
     XCTAssertFalse(conditionBits.auxiliaryCarry)
     XCTAssertFalse(conditionBits.carry)
     XCTAssertFalse(conditionBits.parity)
@@ -46,8 +45,7 @@ class CPUTests: XCTestCase {
 
     cpu.start()
 
-    XCTAssertTrue(registers.a == 0x80)
-
+    XCTAssertEqual(registers.a, 0x80)
     XCTAssertTrue(conditionBits.auxiliaryCarry)
     XCTAssertFalse(conditionBits.carry)
     XCTAssertFalse(conditionBits.parity)
@@ -61,8 +59,7 @@ class CPUTests: XCTestCase {
 
     cpu.start()
 
-    XCTAssertTrue(registers.a == 0x1E)
-
+    XCTAssertEqual(registers.a, 0x1E)
     XCTAssertTrue(conditionBits.auxiliaryCarry)
     XCTAssertFalse(conditionBits.carry)
     XCTAssertTrue(conditionBits.parity)
@@ -77,8 +74,7 @@ class CPUTests: XCTestCase {
 
     cpu.start()
 
-    XCTAssertTrue(registers.a == 0x9A)
-
+    XCTAssertEqual(registers.a, 0x9A)
     XCTAssertTrue(conditionBits.auxiliaryCarry)
     XCTAssertFalse(conditionBits.carry)
     XCTAssertTrue(conditionBits.parity)
@@ -91,14 +87,29 @@ class CPUTests: XCTestCase {
     cpu.start()
   }
 
+  func testSBB() {
+    memory = Data.init(bytes: [0x9D])
+    registers.l = 0x02
+    registers.a = 0x04
+    conditionBits.carry = true
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x01)
+    XCTAssertTrue(conditionBits.auxiliaryCarry)
+    XCTAssertFalse(conditionBits.carry)
+    XCTAssertFalse(conditionBits.parity)
+    XCTAssertFalse(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
+
   func testSUB() {
     memory = Data.init(bytes: [0x97])
     registers.a = 0x3E
 
     cpu.start()
 
-    XCTAssertTrue(registers.a == 0x00)
-
+    XCTAssertEqual(registers.a, 0x00)
     XCTAssertTrue(conditionBits.auxiliaryCarry)
     XCTAssertFalse(conditionBits.carry)
     XCTAssertTrue(conditionBits.parity)
