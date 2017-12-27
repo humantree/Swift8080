@@ -82,6 +82,20 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testANA() {
+    memory = Data.init(bytes: [0xA1])
+    registers.a = 0xFC
+    registers.c = 0x0F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x0C)
+    XCTAssertFalse(conditionBits.carry)
+    XCTAssertTrue(conditionBits.parity)
+    XCTAssertFalse(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
+
   func testNOP() {
     memory = Data.init(bytes: [0x00])
     cpu.start()

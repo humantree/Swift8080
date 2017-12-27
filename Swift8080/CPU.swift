@@ -36,6 +36,17 @@ class CPU {
     
     programCounter += 1
   }
+
+  private func and(_ operand: UInt8) {
+    registers.a = registers.a & operand
+
+    conditionBits.carry = false
+    conditionBits.setSign(registers.a)
+    conditionBits.setParity(registers.a)
+    conditionBits.setZero(registers.a)
+
+    programCounter += 1
+  }
   
   private func nop() { programCounter += 1 }
   
@@ -229,14 +240,14 @@ class CPU {
       case 0x9D: sub(registers.l, borrow: true)
       case 0x9E: sub(registers.m, borrow: true)
       case 0x9F: sub(registers.a, borrow: true)
-      case 0xA0: unimplementedInstruction(instruction: byte)
-      case 0xA1: unimplementedInstruction(instruction: byte)
-      case 0xA2: unimplementedInstruction(instruction: byte)
-      case 0xA3: unimplementedInstruction(instruction: byte)
-      case 0xA4: unimplementedInstruction(instruction: byte)
-      case 0xA5: unimplementedInstruction(instruction: byte)
-      case 0xA6: unimplementedInstruction(instruction: byte)
-      case 0xA7: unimplementedInstruction(instruction: byte)
+      case 0xA0: and(registers.b)
+      case 0xA1: and(registers.c)
+      case 0xA2: and(registers.d)
+      case 0xA3: and(registers.e)
+      case 0xA4: and(registers.h)
+      case 0xA5: and(registers.l)
+      case 0xA6: and(registers.m)
+      case 0xA7: and(registers.a)
       case 0xA8: unimplementedInstruction(instruction: byte)
       case 0xA9: unimplementedInstruction(instruction: byte)
       case 0xAA: unimplementedInstruction(instruction: byte)
