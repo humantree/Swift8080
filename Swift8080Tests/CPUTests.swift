@@ -96,6 +96,48 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testCMP1() {
+    memory = Data.init(bytes: [0xBB])
+    registers.a = 0x0A
+    registers.e = 0x05
+
+    cpu.start()
+
+    XCTAssertTrue(conditionBits.auxiliaryCarry)
+    XCTAssertFalse(conditionBits.carry)
+    XCTAssertTrue(conditionBits.parity)
+    XCTAssertFalse(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
+
+  func testCMP2() {
+    memory = Data.init(bytes: [0xBB])
+    registers.a = 0x02
+    registers.e = 0x05
+
+    cpu.start()
+
+    XCTAssertFalse(conditionBits.auxiliaryCarry)
+    XCTAssertTrue(conditionBits.carry)
+    XCTAssertFalse(conditionBits.parity)
+    XCTAssertTrue(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
+
+  func testCMP3() {
+    memory = Data.init(bytes: [0xBB])
+    registers.a = 0xE5
+    registers.e = 0x05
+
+    cpu.start()
+
+    XCTAssertTrue(conditionBits.auxiliaryCarry)
+    XCTAssertFalse(conditionBits.carry)
+    XCTAssertFalse(conditionBits.parity)
+    XCTAssertTrue(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
+
   func testNOP() {
     memory = Data.init(bytes: [0x00])
     cpu.start()

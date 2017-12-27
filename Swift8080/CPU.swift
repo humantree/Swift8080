@@ -11,15 +11,19 @@ import Foundation
 class CPU {
   private let byteSize = MemoryLayout<UInt8>.size
 
+  private func flipBits(_ byte: UInt8) -> UInt8 {
+    return byte & 0xF ^ 0xF
+  }
+
   private func unimplementedInstruction(instruction: UInt8) {
     let hex = String(format: "%02X", instruction)
     print("Error: Unimplemented instruction (\(hex))")
     exit(1)
   }
   
-  private func add(_ addend: UInt8, carry: Bool = false) {
-    var nibbleResult = registers.a & 0xF + addend & 0xF
-    var result = UInt16(registers.a) + UInt16(addend)
+  private func add(_ operand: UInt8, carry: Bool = false) {
+    var nibbleResult = registers.a & 0xF + operand & 0xF
+    var result = UInt16(registers.a) + UInt16(operand)
     
     if carry {
       nibbleResult += UInt8(conditionBits.carry.hashValue)
@@ -47,7 +51,21 @@ class CPU {
 
     programCounter += 1
   }
-  
+
+  private func compare(_ operand: UInt8) {
+    let nibbleResult = registers.a & 0xF + flipBits(operand) + 1
+    let result = UInt16(registers.a) &- UInt16(operand)
+    let result8 = UInt8(result & 0xFF)
+
+    conditionBits.setAuxiliaryCarry(nibbleResult)
+    conditionBits.setCarry(result8, result)
+    conditionBits.setSign(result8)
+    conditionBits.setParity(result8)
+    conditionBits.zero = registers.a == operand
+
+    programCounter += 1
+  }
+
   private func nop() { programCounter += 1 }
 
   private func or(_ operand: UInt8) {
@@ -61,10 +79,9 @@ class CPU {
     programCounter += 1
   }
 
-  private func sub(_ subtrahend: UInt8, borrow: Bool = false) {
-    let twosComplementAddend = subtrahend & 0xF ^ 0xF
-    var nibbleResult = registers.a & 0xF + twosComplementAddend + 1
-    var result = UInt16(registers.a) &- UInt16(subtrahend)
+  private func sub(_ operand: UInt8, borrow: Bool = false) {
+    var nibbleResult = registers.a & 0xF + flipBits(operand) + 1
+    var result = UInt16(registers.a) &- UInt16(operand)
 
     if borrow {
       nibbleResult -= UInt8(conditionBits.carry.hashValue)
@@ -287,14 +304,14 @@ class CPU {
       case 0xB5: or(registers.l)
       case 0xB6: or(registers.m)
       case 0xB7: or(registers.a)
-      case 0xB8: unimplementedInstruction(instruction: byte)
-      case 0xB9: unimplementedInstruction(instruction: byte)
-      case 0xBA: unimplementedInstruction(instruction: byte)
-      case 0xBB: unimplementedInstruction(instruction: byte)
-      case 0xBC: unimplementedInstruction(instruction: byte)
-      case 0xBD: unimplementedInstruction(instruction: byte)
-      case 0xBE: unimplementedInstruction(instruction: byte)
-      case 0xBF: unimplementedInstruction(instruction: byte)
+      case 0xB8: compare(registers.b)
+      case 0xB9: compare(registers.c)
+      case 0xBA: compare(registers.d)
+      case 0xBB: compare(registers.e)
+      case 0xBC: compare(registers.h)
+      case 0xBD: compare(registers.l)
+      case 0xBE: compare(registers.m)
+      case 0xBF: compare(registers.a)
       case 0xC0: unimplementedInstruction(instruction: byte)
       case 0xC1: unimplementedInstruction(instruction: byte)
       case 0xC2: unimplementedInstruction(instruction: byte)
