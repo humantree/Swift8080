@@ -49,7 +49,18 @@ class CPU {
   }
   
   private func nop() { programCounter += 1 }
-  
+
+  private func or(_ operand: UInt8) {
+    registers.a = registers.a | operand
+
+    conditionBits.carry = false
+    conditionBits.setSign(registers.a)
+    conditionBits.setParity(registers.a)
+    conditionBits.setZero(registers.a)
+
+    programCounter += 1
+  }
+
   private func sub(_ subtrahend: UInt8, borrow: Bool = false) {
     let twosComplementAddend = subtrahend & 0xF ^ 0xF
     var nibbleResult = registers.a & 0xF + twosComplementAddend + 1
@@ -268,14 +279,14 @@ class CPU {
       case 0xAD: xor(registers.l)
       case 0xAE: xor(registers.m)
       case 0xAF: xor(registers.a)
-      case 0xB0: unimplementedInstruction(instruction: byte)
-      case 0xB1: unimplementedInstruction(instruction: byte)
-      case 0xB2: unimplementedInstruction(instruction: byte)
-      case 0xB3: unimplementedInstruction(instruction: byte)
-      case 0xB4: unimplementedInstruction(instruction: byte)
-      case 0xB5: unimplementedInstruction(instruction: byte)
-      case 0xB6: unimplementedInstruction(instruction: byte)
-      case 0xB7: unimplementedInstruction(instruction: byte)
+      case 0xB0: or(registers.b)
+      case 0xB1: or(registers.c)
+      case 0xB2: or(registers.d)
+      case 0xB3: or(registers.e)
+      case 0xB4: or(registers.h)
+      case 0xB5: or(registers.l)
+      case 0xB6: or(registers.m)
+      case 0xB7: or(registers.a)
       case 0xB8: unimplementedInstruction(instruction: byte)
       case 0xB9: unimplementedInstruction(instruction: byte)
       case 0xBA: unimplementedInstruction(instruction: byte)

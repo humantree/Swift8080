@@ -101,6 +101,20 @@ class CPUTests: XCTestCase {
     cpu.start()
   }
 
+  func testORA() {
+    memory = Data.init(bytes: [0xB1])
+    registers.c = 0x0F
+    registers.a = 0x33
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x3F)
+    XCTAssertFalse(conditionBits.carry)
+    XCTAssertTrue(conditionBits.parity)
+    XCTAssertFalse(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
+
   func testSBB() {
     memory = Data.init(bytes: [0x9D])
     registers.l = 0x02
