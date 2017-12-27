@@ -71,6 +71,18 @@ class CPU {
     programCounter += 1
   }
 
+  private func xor(_ operand: UInt8) {
+    registers.a = registers.a ^ operand
+
+    conditionBits.auxiliaryCarry = false
+    conditionBits.carry = false
+    conditionBits.setSign(registers.a)
+    conditionBits.setParity(registers.a)
+    conditionBits.setZero(registers.a)
+
+    programCounter += 1
+  }
+
   func start() {
     while programCounter < memory.count {
       let range = NSRange(location: Int(programCounter), length: byteSize)
@@ -248,14 +260,14 @@ class CPU {
       case 0xA5: and(registers.l)
       case 0xA6: and(registers.m)
       case 0xA7: and(registers.a)
-      case 0xA8: unimplementedInstruction(instruction: byte)
-      case 0xA9: unimplementedInstruction(instruction: byte)
-      case 0xAA: unimplementedInstruction(instruction: byte)
-      case 0xAB: unimplementedInstruction(instruction: byte)
-      case 0xAC: unimplementedInstruction(instruction: byte)
-      case 0xAD: unimplementedInstruction(instruction: byte)
-      case 0xAE: unimplementedInstruction(instruction: byte)
-      case 0xAF: unimplementedInstruction(instruction: byte)
+      case 0xA8: xor(registers.b)
+      case 0xA9: xor(registers.c)
+      case 0xAA: xor(registers.d)
+      case 0xAB: xor(registers.e)
+      case 0xAC: xor(registers.h)
+      case 0xAD: xor(registers.l)
+      case 0xAE: xor(registers.m)
+      case 0xAF: xor(registers.a)
       case 0xB0: unimplementedInstruction(instruction: byte)
       case 0xB1: unimplementedInstruction(instruction: byte)
       case 0xB2: unimplementedInstruction(instruction: byte)

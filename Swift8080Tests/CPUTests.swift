@@ -130,4 +130,19 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.sign)
     XCTAssertTrue(conditionBits.zero)
   }
+
+  func testXRA() {
+    memory = Data.init(bytes: [0xA8])
+    registers.a = 0x5C
+    registers.b = 0x78
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x24)
+    XCTAssertFalse(conditionBits.auxiliaryCarry)
+    XCTAssertFalse(conditionBits.carry)
+    XCTAssertTrue(conditionBits.parity)
+    XCTAssertFalse(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
 }
