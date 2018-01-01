@@ -20,10 +20,21 @@ class CPU {
     return byte & 0xF ^ 0xF
   }
 
+  private func getNextByte() -> UInt8 {
+    let range = NSRange(location: Int(programCounter), length: byteSize)
+    let byteData = memory.subdata(in: Range(range)!) as NSData
+
+    var byte = UInt8()
+    byteData.getBytes(&byte, length: byteData.length)
+
+    programCounter += 1
+
+    return byte
+  }
+
   private func unimplementedInstruction(instruction: UInt8) {
     let hex = String(format: "%02X", instruction)
     print("Error: Unimplemented instruction (\(hex))")
-    exit(1)
   }
   
   private func add(_ operand: UInt8, carry: Bool = false) {
@@ -42,8 +53,6 @@ class CPU {
     conditionBits.setSign(registers.a)
     conditionBits.setParity(registers.a)
     conditionBits.setZero(registers.a)
-    
-    programCounter += 1
   }
 
   private func and(_ operand: UInt8) {
@@ -53,8 +62,6 @@ class CPU {
     conditionBits.setSign(registers.a)
     conditionBits.setParity(registers.a)
     conditionBits.setZero(registers.a)
-
-    programCounter += 1
   }
 
   private func compare(_ operand: UInt8) {
@@ -67,11 +74,13 @@ class CPU {
     conditionBits.setSign(result8)
     conditionBits.setParity(result8)
     conditionBits.zero = registers.a == operand
-
-    programCounter += 1
   }
 
-  private func nop() { programCounter += 1 }
+  private func move(to: inout UInt8) {
+    to = getNextByte()
+  }
+
+  private func nop() { }
 
   private func or(_ operand: UInt8) {
     registers.a = registers.a | operand
@@ -80,8 +89,6 @@ class CPU {
     conditionBits.setSign(registers.a)
     conditionBits.setParity(registers.a)
     conditionBits.setZero(registers.a)
-
-    programCounter += 1
   }
 
   private func rotate(_ direction: Direction, carry: Bool = false) {
@@ -101,7 +108,6 @@ class CPU {
     }
 
     registers.a = UInt8(rotated & 0xFF)
-    programCounter += 1
   }
 
   private func sub(_ operand: UInt8, borrow: Bool = false) {
@@ -120,8 +126,6 @@ class CPU {
     conditionBits.setSign(registers.a)
     conditionBits.setParity(registers.a)
     conditionBits.setZero(registers.a)
-    
-    programCounter += 1
   }
 
   private func xor(_ operand: UInt8) {
@@ -132,17 +136,11 @@ class CPU {
     conditionBits.setSign(registers.a)
     conditionBits.setParity(registers.a)
     conditionBits.setZero(registers.a)
-
-    programCounter += 1
   }
 
   func start() {
     while programCounter < memory.count {
-      let range = NSRange(location: Int(programCounter), length: byteSize)
-      let byteData = memory.subdata(in: Range(range)!) as NSData
-
-      var byte = UInt8()
-      byteData.getBytes(&byte, length: byteData.length)
+      let byte = getNextByte()
 
       switch byte {
       case 0x00: nop()
@@ -151,7 +149,7 @@ class CPU {
       case 0x03: unimplementedInstruction(instruction: byte)
       case 0x04: unimplementedInstruction(instruction: byte)
       case 0x05: unimplementedInstruction(instruction: byte)
-      case 0x06: unimplementedInstruction(instruction: byte)
+      case 0x06: move(to: &registers.b)
       case 0x07: rotate(.left)
       case 0x08: nop()
       case 0x09: unimplementedInstruction(instruction: byte)
@@ -159,7 +157,7 @@ class CPU {
       case 0x0B: unimplementedInstruction(instruction: byte)
       case 0x0C: unimplementedInstruction(instruction: byte)
       case 0x0D: unimplementedInstruction(instruction: byte)
-      case 0x0E: unimplementedInstruction(instruction: byte)
+      case 0x0E: move(to: &registers.c)
       case 0x0F: rotate(.right)
       case 0x10: nop()
       case 0x11: unimplementedInstruction(instruction: byte)
@@ -167,7 +165,7 @@ class CPU {
       case 0x13: unimplementedInstruction(instruction: byte)
       case 0x14: unimplementedInstruction(instruction: byte)
       case 0x15: unimplementedInstruction(instruction: byte)
-      case 0x16: unimplementedInstruction(instruction: byte)
+      case 0x16: move(to: &registers.d)
       case 0x17: rotate(.left, carry: true)
       case 0x18: nop()
       case 0x19: unimplementedInstruction(instruction: byte)
@@ -175,7 +173,7 @@ class CPU {
       case 0x1B: unimplementedInstruction(instruction: byte)
       case 0x1C: unimplementedInstruction(instruction: byte)
       case 0x1D: unimplementedInstruction(instruction: byte)
-      case 0x1E: unimplementedInstruction(instruction: byte)
+      case 0x1E: move(to: &registers.e)
       case 0x1F: rotate(.right, carry: true)
       case 0x20: unimplementedInstruction(instruction: byte)
       case 0x21: unimplementedInstruction(instruction: byte)
@@ -183,7 +181,7 @@ class CPU {
       case 0x23: unimplementedInstruction(instruction: byte)
       case 0x24: unimplementedInstruction(instruction: byte)
       case 0x25: unimplementedInstruction(instruction: byte)
-      case 0x26: unimplementedInstruction(instruction: byte)
+      case 0x26: move(to: &registers.h)
       case 0x27: unimplementedInstruction(instruction: byte)
       case 0x28: nop()
       case 0x29: unimplementedInstruction(instruction: byte)
@@ -191,7 +189,7 @@ class CPU {
       case 0x2B: unimplementedInstruction(instruction: byte)
       case 0x2C: unimplementedInstruction(instruction: byte)
       case 0x2D: unimplementedInstruction(instruction: byte)
-      case 0x2E: unimplementedInstruction(instruction: byte)
+      case 0x2E: move(to: &registers.l)
       case 0x2F: unimplementedInstruction(instruction: byte)
       case 0x30: unimplementedInstruction(instruction: byte)
       case 0x31: unimplementedInstruction(instruction: byte)
@@ -199,7 +197,7 @@ class CPU {
       case 0x33: unimplementedInstruction(instruction: byte)
       case 0x34: unimplementedInstruction(instruction: byte)
       case 0x35: unimplementedInstruction(instruction: byte)
-      case 0x36: unimplementedInstruction(instruction: byte)
+      case 0x36: move(to: &registers.m)
       case 0x37: unimplementedInstruction(instruction: byte)
       case 0x38: nop()
       case 0x39: unimplementedInstruction(instruction: byte)
@@ -207,7 +205,7 @@ class CPU {
       case 0x3B: unimplementedInstruction(instruction: byte)
       case 0x3C: unimplementedInstruction(instruction: byte)
       case 0x3D: unimplementedInstruction(instruction: byte)
-      case 0x3E: unimplementedInstruction(instruction: byte)
+      case 0x3E: move(to: &registers.e)
       case 0x3F: unimplementedInstruction(instruction: byte)
       case 0x40: unimplementedInstruction(instruction: byte)
       case 0x41: unimplementedInstruction(instruction: byte)

@@ -138,6 +138,20 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testMVI() {
+    memory = Data.init(repeating: 0x00, count: 0xFFFF)
+
+    let data = Data.init(bytes: [
+      0x26, 0x3C,
+      0x2E, 0xF4,
+      0x36, 0xFF])
+    memory.replaceSubrange(0..<data.count, with: data)
+
+    cpu.start()
+
+    XCTAssertEqual(memory[0x3CF4], 0xFF)
+  }
+
   func testNOP() {
     memory = Data.init(bytes: [0x00])
     cpu.start()
