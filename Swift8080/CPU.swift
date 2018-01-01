@@ -84,8 +84,9 @@ class CPU {
     programCounter += 1
   }
 
-  private func rotate(_ direction: Direction) {
+  private func rotate(_ direction: Direction, carry: Bool = false) {
     let bitMask: UInt8 = direction == .left ? 0x80 : 0x01
+    let carryValue = conditionBits.carry;
     conditionBits.carry = registers.a & bitMask == bitMask
 
     var rotated: UInt16
@@ -95,7 +96,7 @@ class CPU {
       rotated = UInt16(registers.a >> 1)
     }
 
-    if conditionBits.carry {
+    if (carry && carryValue) || (!carry && conditionBits.carry) {
       rotated += direction == .left ? 0x01 : 0x80
     }
 
@@ -167,7 +168,7 @@ class CPU {
       case 0x14: unimplementedInstruction(instruction: byte)
       case 0x15: unimplementedInstruction(instruction: byte)
       case 0x16: unimplementedInstruction(instruction: byte)
-      case 0x17: unimplementedInstruction(instruction: byte)
+      case 0x17: rotate(.left, carry: true)
       case 0x18: nop()
       case 0x19: unimplementedInstruction(instruction: byte)
       case 0x1A: unimplementedInstruction(instruction: byte)
@@ -175,7 +176,7 @@ class CPU {
       case 0x1C: unimplementedInstruction(instruction: byte)
       case 0x1D: unimplementedInstruction(instruction: byte)
       case 0x1E: unimplementedInstruction(instruction: byte)
-      case 0x1F: unimplementedInstruction(instruction: byte)
+      case 0x1F: rotate(.right, carry: true)
       case 0x20: unimplementedInstruction(instruction: byte)
       case 0x21: unimplementedInstruction(instruction: byte)
       case 0x22: unimplementedInstruction(instruction: byte)
