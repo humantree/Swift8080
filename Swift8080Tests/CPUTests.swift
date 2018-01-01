@@ -157,6 +157,26 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testRLC() {
+    memory = Data.init(bytes: [0x07])
+    registers.a = 0xF2
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0xE5)
+    XCTAssertTrue(conditionBits.carry)
+  }
+
+  func testRRC() {
+    memory = Data.init(bytes: [0x0F])
+    registers.a = 0xF2
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x79)
+    XCTAssertFalse(conditionBits.carry)
+  }
+
   func testSBB() {
     memory = Data.init(bytes: [0x9D])
     registers.l = 0x02

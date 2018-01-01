@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum Direction {
+  case left
+  case right
+}
+
 class CPU {
   private let byteSize = MemoryLayout<UInt8>.size
 
@@ -79,6 +84,25 @@ class CPU {
     programCounter += 1
   }
 
+  private func rotate(_ direction: Direction) {
+    let bitMask: UInt8 = direction == .left ? 0x80 : 0x01
+    conditionBits.carry = registers.a & bitMask == bitMask
+
+    var rotated: UInt16
+    if direction == .left {
+      rotated = UInt16(registers.a << 1)
+    } else {
+      rotated = UInt16(registers.a >> 1)
+    }
+
+    if conditionBits.carry {
+      rotated += direction == .left ? 0x01 : 0x80
+    }
+
+    registers.a = UInt8(rotated & 0xFF)
+    programCounter += 1
+  }
+
   private func sub(_ operand: UInt8, borrow: Bool = false) {
     var nibbleResult = registers.a & 0xF + flipBits(operand) + 1
     var result = UInt16(registers.a) &- UInt16(operand)
@@ -127,7 +151,7 @@ class CPU {
       case 0x04: unimplementedInstruction(instruction: byte)
       case 0x05: unimplementedInstruction(instruction: byte)
       case 0x06: unimplementedInstruction(instruction: byte)
-      case 0x07: unimplementedInstruction(instruction: byte)
+      case 0x07: rotate(.left)
       case 0x08: nop()
       case 0x09: unimplementedInstruction(instruction: byte)
       case 0x0A: unimplementedInstruction(instruction: byte)
@@ -135,7 +159,7 @@ class CPU {
       case 0x0C: unimplementedInstruction(instruction: byte)
       case 0x0D: unimplementedInstruction(instruction: byte)
       case 0x0E: unimplementedInstruction(instruction: byte)
-      case 0x0F: unimplementedInstruction(instruction: byte)
+      case 0x0F: rotate(.right)
       case 0x10: nop()
       case 0x11: unimplementedInstruction(instruction: byte)
       case 0x12: unimplementedInstruction(instruction: byte)
