@@ -10,7 +10,7 @@ import Foundation
 
 var conditionBits = ConditionBits()
 var memory = Data()
-var programCounter = UInt16()
+var programCounter = Int()
 var registerPairs = RegisterPairs()
 var registers = Registers()
 var stackPointer = UInt16()

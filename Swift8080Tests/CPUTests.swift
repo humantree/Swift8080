@@ -17,7 +17,7 @@ class CPUTests: XCTestCase {
 
     conditionBits = ConditionBits()
     memory = Data()
-    programCounter = UInt16()
+    programCounter = Int()
     registers = Registers()
     stackPointer = UInt16()
   }

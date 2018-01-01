@@ -14,22 +14,13 @@ enum Direction {
 }
 
 class CPU {
-  private let byteSize = MemoryLayout<UInt8>.size
-
   private func flipBits(_ byte: UInt8) -> UInt8 {
     return byte & 0xF ^ 0xF
   }
 
   private func getNextByte() -> UInt8 {
-    let range = NSRange(location: Int(programCounter), length: byteSize)
-    let byteData = memory.subdata(in: Range(range)!) as NSData
-
-    var byte = UInt8()
-    byteData.getBytes(&byte, length: byteData.length)
-
     programCounter += 1
-
-    return byte
+    return memory[programCounter - 1]
   }
 
   private func unimplementedInstruction(instruction: UInt8) {
