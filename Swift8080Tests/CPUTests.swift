@@ -175,6 +175,17 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testMOV() {
+    addToMemory([0x77])
+    registers.h = 0x2B
+    registers.l = 0xE9
+    registers.a = 0xEE
+
+    cpu.start()
+
+    XCTAssertEqual(memory[0x2BE9], 0xEE)
+  }
+
   func testMVI() {
     addToMemory([
       0x26, 0x3C,
