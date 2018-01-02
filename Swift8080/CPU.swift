@@ -340,7 +340,7 @@ class CPU {
       case 0xCB: nop()
       case 0xCC: unimplementedInstruction(instruction: byte)
       case 0xCD: unimplementedInstruction(instruction: byte)
-      case 0xCE: unimplementedInstruction(instruction: byte)
+      case 0xCE: add(getNextByte(), carry: true)
       case 0xCF: unimplementedInstruction(instruction: byte)
       case 0xD0: unimplementedInstruction(instruction: byte)
       case 0xD1: unimplementedInstruction(instruction: byte)

@@ -27,6 +27,22 @@ class CPUTests: XCTestCase {
     memory.replaceSubrange(0..<data.count, with: data)
   }
 
+  func testACI() {
+    addToMemory([
+      0x3E, 0x56,
+      0xCE, 0xBE,
+      0xCE, 0x42])
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x57)
+    XCTAssertFalse(conditionBits.auxiliaryCarry)
+    XCTAssertFalse(conditionBits.carry)
+    XCTAssertFalse(conditionBits.parity)
+    XCTAssertFalse(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
+
   func testADC1() {
     addToMemory([0x89])
     registers.c = 0x3D
