@@ -16,14 +16,19 @@ class CPUTests: XCTestCase {
     super.setUp()
 
     conditionBits = ConditionBits()
-    memory = Data()
+    memory = Data.init(repeating: 0x00, count: 0xFFFF)
     programCounter = Int()
     registers = Registers()
     stackPointer = UInt16()
   }
 
+  func addToMemory(_ bytes: [UInt8]) {
+    let data = Data.init(bytes: bytes)
+    memory.replaceSubrange(0..<data.count, with: data)
+  }
+
   func testADC1() {
-    memory = Data.init(bytes: [0x89])
+    addToMemory([0x89])
     registers.c = 0x3D
     registers.a = 0x42
 
@@ -38,7 +43,7 @@ class CPUTests: XCTestCase {
   }
 
   func testADC2() {
-    memory = Data.init(bytes: [0x89])
+    addToMemory([0x89])
     registers.c = 0x3D
     registers.a = 0x42
     conditionBits.carry = true
@@ -54,7 +59,7 @@ class CPUTests: XCTestCase {
   }
 
   func testADD1() {
-    memory = Data.init(bytes: [0x87])
+    addToMemory([0x87])
     registers.a = 0x0F
 
     cpu.start()
@@ -68,7 +73,7 @@ class CPUTests: XCTestCase {
   }
 
   func testADD2() {
-    memory = Data.init(bytes: [0x82])
+    addToMemory([0x82])
     registers.d = 0x2E
     registers.a = 0x6C
 
@@ -83,7 +88,7 @@ class CPUTests: XCTestCase {
   }
 
   func testANA() {
-    memory = Data.init(bytes: [0xA1])
+    addToMemory([0xA1])
     registers.a = 0xFC
     registers.c = 0x0F
 
@@ -97,7 +102,7 @@ class CPUTests: XCTestCase {
   }
 
   func testCMP1() {
-    memory = Data.init(bytes: [0xBB])
+    addToMemory([0xBB])
     registers.a = 0x0A
     registers.e = 0x05
 
@@ -111,7 +116,7 @@ class CPUTests: XCTestCase {
   }
 
   func testCMP2() {
-    memory = Data.init(bytes: [0xBB])
+    addToMemory([0xBB])
     registers.a = 0x02
     registers.e = 0x05
 
@@ -125,7 +130,7 @@ class CPUTests: XCTestCase {
   }
 
   func testCMP3() {
-    memory = Data.init(bytes: [0xBB])
+    addToMemory([0xBB])
     registers.a = 0xE5
     registers.e = 0x05
 
@@ -139,13 +144,10 @@ class CPUTests: XCTestCase {
   }
 
   func testMVI() {
-    memory = Data.init(repeating: 0x00, count: 0xFFFF)
-
-    let data = Data.init(bytes: [
+    addToMemory([
       0x26, 0x3C,
       0x2E, 0xF4,
       0x36, 0xFF])
-    memory.replaceSubrange(0..<data.count, with: data)
 
     cpu.start()
 
@@ -153,12 +155,11 @@ class CPUTests: XCTestCase {
   }
 
   func testNOP() {
-    memory = Data.init(bytes: [0x00])
     cpu.start()
   }
 
   func testORA() {
-    memory = Data.init(bytes: [0xB1])
+    addToMemory([0xB1])
     registers.c = 0x0F
     registers.a = 0x33
 
@@ -172,7 +173,7 @@ class CPUTests: XCTestCase {
   }
 
   func testRAL() {
-    memory = Data.init(bytes: [0x17])
+    addToMemory([0x17])
     registers.a = 0xB5
 
     cpu.start()
@@ -182,7 +183,7 @@ class CPUTests: XCTestCase {
   }
 
   func testRAR() {
-    memory = Data.init(bytes: [0x1F])
+    addToMemory([0x1F])
     registers.a = 0x6A
     conditionBits.carry = true
 
@@ -193,7 +194,7 @@ class CPUTests: XCTestCase {
   }
   
   func testRLC() {
-    memory = Data.init(bytes: [0x07])
+    addToMemory([0x07])
     registers.a = 0xF2
 
     cpu.start()
@@ -203,7 +204,7 @@ class CPUTests: XCTestCase {
   }
 
   func testRRC() {
-    memory = Data.init(bytes: [0x0F])
+    addToMemory([0x0F])
     registers.a = 0xF2
 
     cpu.start()
@@ -213,7 +214,7 @@ class CPUTests: XCTestCase {
   }
 
   func testSBB() {
-    memory = Data.init(bytes: [0x9D])
+    addToMemory([0x9D])
     registers.l = 0x02
     registers.a = 0x04
     conditionBits.carry = true
@@ -229,7 +230,7 @@ class CPUTests: XCTestCase {
   }
 
   func testSUB() {
-    memory = Data.init(bytes: [0x97])
+    addToMemory([0x97])
     registers.a = 0x3E
 
     cpu.start()
@@ -243,7 +244,7 @@ class CPUTests: XCTestCase {
   }
 
   func testXRA() {
-    memory = Data.init(bytes: [0xA8])
+    addToMemory([0xA8])
     registers.a = 0x5C
     registers.b = 0x78
 
