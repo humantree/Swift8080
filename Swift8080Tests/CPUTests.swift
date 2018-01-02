@@ -261,6 +261,20 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testSBI() {
+    addToMemory([0xDE, 0x01])
+    conditionBits.carry = true
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0xFE)
+    XCTAssertFalse(conditionBits.auxiliaryCarry)
+    XCTAssertTrue(conditionBits.carry)
+    XCTAssertFalse(conditionBits.parity)
+    XCTAssertTrue(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
+
   func testSUB() {
     addToMemory([0x97])
     registers.a = 0x3E
@@ -273,6 +287,21 @@ class CPUTests: XCTestCase {
     XCTAssertTrue(conditionBits.parity)
     XCTAssertFalse(conditionBits.sign)
     XCTAssertTrue(conditionBits.zero)
+  }
+
+  func testSUI() {
+    addToMemory([
+      0x3E, 0x00,
+      0xD6, 0x01])
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0xFF)
+    XCTAssertFalse(conditionBits.auxiliaryCarry)
+    XCTAssertTrue(conditionBits.carry)
+    XCTAssertTrue(conditionBits.parity)
+    XCTAssertTrue(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
   }
 
   func testXRA() {
