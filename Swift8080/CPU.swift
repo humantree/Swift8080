@@ -23,6 +23,10 @@ class CPU {
     return memory[programCounter - 1]
   }
 
+  private func joinBytes(_ bytes: (UInt8, UInt8)) -> UInt16 {
+    return UInt16(bytes.0) << 8 + UInt16(bytes.1)
+  }
+
   private func unimplementedInstruction(instruction: UInt8) {
     let hex = String(format: "%02X", instruction)
     print("Error: Unimplemented instruction (\(hex))")
@@ -136,7 +140,7 @@ class CPU {
       switch byte {
       case 0x00: nop()
       case 0x01: unimplementedInstruction(instruction: byte)
-      case 0x02: unimplementedInstruction(instruction: byte)
+      case 0x02: move(registers.a, to: &memory[Int(joinBytes(registerPairs.b))])
       case 0x03: unimplementedInstruction(instruction: byte)
       case 0x04: unimplementedInstruction(instruction: byte)
       case 0x05: unimplementedInstruction(instruction: byte)
@@ -152,7 +156,7 @@ class CPU {
       case 0x0F: rotate(.right)
       case 0x10: nop()
       case 0x11: unimplementedInstruction(instruction: byte)
-      case 0x12: unimplementedInstruction(instruction: byte)
+      case 0x12: move(registers.a, to: &memory[Int(joinBytes(registerPairs.d))])
       case 0x13: unimplementedInstruction(instruction: byte)
       case 0x14: unimplementedInstruction(instruction: byte)
       case 0x15: unimplementedInstruction(instruction: byte)
