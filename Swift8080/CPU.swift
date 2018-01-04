@@ -144,7 +144,7 @@ class CPU {
       case 0x07: rotate(.left)
       case 0x08: nop()
       case 0x09: unimplementedInstruction(instruction: byte)
-      case 0x0A: unimplementedInstruction(instruction: byte)
+      case 0x0A: registers.a = memory[Int(joinBytes(registerPairs.b))]
       case 0x0B: unimplementedInstruction(instruction: byte)
       case 0x0C: unimplementedInstruction(instruction: byte)
       case 0x0D: unimplementedInstruction(instruction: byte)
@@ -160,7 +160,7 @@ class CPU {
       case 0x17: rotate(.left, carry: true)
       case 0x18: nop()
       case 0x19: unimplementedInstruction(instruction: byte)
-      case 0x1A: unimplementedInstruction(instruction: byte)
+      case 0x1A: registers.a = memory[Int(joinBytes(registerPairs.d))]
       case 0x1B: unimplementedInstruction(instruction: byte)
       case 0x1C: unimplementedInstruction(instruction: byte)
       case 0x1D: unimplementedInstruction(instruction: byte)

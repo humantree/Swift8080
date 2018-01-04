@@ -175,6 +175,17 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testLDAX() {
+    addToMemory([0x1A])
+    memory[0x938B] = 0x2D
+    registers.d = 0x93
+    registers.e = 0x8B
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x2D)
+  }
+
   func testMOV() {
     addToMemory([0x77])
     registers.h = 0x2B
