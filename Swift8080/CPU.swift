@@ -189,7 +189,7 @@ class CPU {
       case 0x34: unimplementedInstruction(instruction: byte)
       case 0x35: unimplementedInstruction(instruction: byte)
       case 0x36: registers.m = getNextByte()
-      case 0x37: unimplementedInstruction(instruction: byte)
+      case 0x37: conditionBits.carry = true
       case 0x38: nop()
       case 0x39: unimplementedInstruction(instruction: byte)
       case 0x3A: unimplementedInstruction(instruction: byte)
@@ -197,7 +197,7 @@ class CPU {
       case 0x3C: unimplementedInstruction(instruction: byte)
       case 0x3D: unimplementedInstruction(instruction: byte)
       case 0x3E: registers.a = getNextByte()
-      case 0x3F: unimplementedInstruction(instruction: byte)
+      case 0x3F: conditionBits.carry = !conditionBits.carry
       case 0x40: nop()
       case 0x41: registers.b = registers.c
       case 0x42: registers.b = registers.d
