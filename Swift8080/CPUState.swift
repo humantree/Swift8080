@@ -30,6 +30,12 @@ struct ConditionBits {
     carry = result16 != result
   }
 
+  mutating func setParitySignZero(_ byte: UInt8) {
+    setParity(byte)
+    setSign(byte)
+    setZero(byte)
+  }
+
   mutating func setParity(_ byte: UInt8) {
     var byte = byte
     var count = 0

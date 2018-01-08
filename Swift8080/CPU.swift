@@ -50,18 +50,14 @@ class CPU {
     
     conditionBits.setAuxiliaryCarry(nibbleResult)
     conditionBits.setCarry(registers.a, result)
-    conditionBits.setSign(registers.a)
-    conditionBits.setParity(registers.a)
-    conditionBits.setZero(registers.a)
+    conditionBits.setParitySignZero(registers.a)
   }
 
   private func and(_ operand: UInt8) {
     registers.a = registers.a & operand
 
     conditionBits.carry = false
-    conditionBits.setSign(registers.a)
-    conditionBits.setParity(registers.a)
-    conditionBits.setZero(registers.a)
+    conditionBits.setParitySignZero(registers.a)
   }
 
   private func compare(_ operand: UInt8) {
@@ -82,9 +78,7 @@ class CPU {
     registers.a = registers.a | operand
 
     conditionBits.carry = false
-    conditionBits.setSign(registers.a)
-    conditionBits.setParity(registers.a)
-    conditionBits.setZero(registers.a)
+    conditionBits.setParitySignZero(registers.a)
   }
 
   private func rotate(_ direction: Direction, carry: Bool = false) {
@@ -119,9 +113,7 @@ class CPU {
     
     conditionBits.setAuxiliaryCarry(nibbleResult)
     conditionBits.setCarry(registers.a, result)
-    conditionBits.setSign(registers.a)
-    conditionBits.setParity(registers.a)
-    conditionBits.setZero(registers.a)
+    conditionBits.setParitySignZero(registers.a)
   }
 
   private func xor(_ operand: UInt8) {
@@ -129,9 +121,7 @@ class CPU {
 
     conditionBits.auxiliaryCarry = false
     conditionBits.carry = false
-    conditionBits.setSign(registers.a)
-    conditionBits.setParity(registers.a)
-    conditionBits.setZero(registers.a)
+    conditionBits.setParitySignZero(registers.a)
   }
 
   func start() {
