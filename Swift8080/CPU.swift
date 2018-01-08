@@ -72,6 +72,14 @@ class CPU {
     conditionBits.zero = registers.a == operand
   }
 
+  private func decrement(_ operand: inout UInt8) {
+    let nibbleResult = operand & 0xF + 0xF
+    operand = operand &- 1
+
+    conditionBits.setAuxiliaryCarry(nibbleResult)
+    conditionBits.setParitySignZero(operand)
+  }
+
   private func increment(_ operand: inout UInt8) {
     operand = operand &+ 1
 
@@ -141,7 +149,7 @@ class CPU {
       case 0x02: memory[Int(joinBytes(registerPairs.b))] = registers.a
       case 0x03: unimplementedInstruction(instruction: byte)
       case 0x04: increment(&registers.b)
-      case 0x05: unimplementedInstruction(instruction: byte)
+      case 0x05: decrement(&registers.b)
       case 0x06: registers.b = getNextByte()
       case 0x07: rotate(.left)
       case 0x08: nop()
@@ -149,7 +157,7 @@ class CPU {
       case 0x0A: registers.a = memory[Int(joinBytes(registerPairs.b))]
       case 0x0B: unimplementedInstruction(instruction: byte)
       case 0x0C: increment(&registers.c)
-      case 0x0D: unimplementedInstruction(instruction: byte)
+      case 0x0D: decrement(&registers.c)
       case 0x0E: registers.c = getNextByte()
       case 0x0F: rotate(.right)
       case 0x10: nop()
@@ -157,7 +165,7 @@ class CPU {
       case 0x12: memory[Int(joinBytes(registerPairs.d))] = registers.a
       case 0x13: unimplementedInstruction(instruction: byte)
       case 0x14: increment(&registers.d)
-      case 0x15: unimplementedInstruction(instruction: byte)
+      case 0x15: decrement(&registers.d)
       case 0x16: registers.d = getNextByte()
       case 0x17: rotate(.left, carry: true)
       case 0x18: nop()
@@ -165,7 +173,7 @@ class CPU {
       case 0x1A: registers.a = memory[Int(joinBytes(registerPairs.d))]
       case 0x1B: unimplementedInstruction(instruction: byte)
       case 0x1C: increment(&registers.e)
-      case 0x1D: unimplementedInstruction(instruction: byte)
+      case 0x1D: decrement(&registers.e)
       case 0x1E: registers.e = getNextByte()
       case 0x1F: rotate(.right, carry: true)
       case 0x20: unimplementedInstruction(instruction: byte)
@@ -173,7 +181,7 @@ class CPU {
       case 0x22: unimplementedInstruction(instruction: byte)
       case 0x23: unimplementedInstruction(instruction: byte)
       case 0x24: increment(&registers.h)
-      case 0x25: unimplementedInstruction(instruction: byte)
+      case 0x25: decrement(&registers.h)
       case 0x26: registers.h = getNextByte()
       case 0x27: unimplementedInstruction(instruction: byte)
       case 0x28: nop()
@@ -181,7 +189,7 @@ class CPU {
       case 0x2A: unimplementedInstruction(instruction: byte)
       case 0x2B: unimplementedInstruction(instruction: byte)
       case 0x2C: increment(&registers.l)
-      case 0x2D: unimplementedInstruction(instruction: byte)
+      case 0x2D: decrement(&registers.l)
       case 0x2E: registers.l = getNextByte()
       case 0x2F: unimplementedInstruction(instruction: byte)
       case 0x30: unimplementedInstruction(instruction: byte)
@@ -189,7 +197,7 @@ class CPU {
       case 0x32: unimplementedInstruction(instruction: byte)
       case 0x33: unimplementedInstruction(instruction: byte)
       case 0x34: increment(&registers.m)
-      case 0x35: unimplementedInstruction(instruction: byte)
+      case 0x35: decrement(&registers.m)
       case 0x36: registers.m = getNextByte()
       case 0x37: conditionBits.carry = true
       case 0x38: nop()
@@ -197,7 +205,7 @@ class CPU {
       case 0x3A: unimplementedInstruction(instruction: byte)
       case 0x3B: unimplementedInstruction(instruction: byte)
       case 0x3C: increment(&registers.a)
-      case 0x3D: unimplementedInstruction(instruction: byte)
+      case 0x3D: decrement(&registers.a)
       case 0x3E: registers.a = getNextByte()
       case 0x3F: conditionBits.carry = !conditionBits.carry
       case 0x40: nop()

@@ -184,6 +184,21 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testDCR() {
+    addToMemory([0x35])
+    registers.h = 0x3A
+    registers.l = 0x7C
+    memory[0x3A7C] = 0x40
+
+    cpu.start()
+
+    XCTAssertEqual(memory[0x3A7C], 0x3F)
+    XCTAssertFalse(conditionBits.auxiliaryCarry)
+    XCTAssertTrue(conditionBits.parity)
+    XCTAssertFalse(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
+
   func testINR() {
     addToMemory([0x0C])
     registers.c = 0x99
