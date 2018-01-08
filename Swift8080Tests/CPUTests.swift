@@ -195,6 +195,23 @@ class CPUTests: XCTestCase {
     XCTAssertEqual(registers.a, 0x2D)
   }
 
+  func testLXI1() {
+    addToMemory([0x21, 0x03, 0x01])
+
+    cpu.start()
+
+    XCTAssertEqual(registers.h, 0x01)
+    XCTAssertEqual(registers.l, 0x03)
+  }
+
+  func testLXI2() {
+    addToMemory([0x31, 0xBC, 0x3A])
+
+    cpu.start()
+
+    XCTAssertEqual(stackPointer, 0x3ABC)
+  }
+
   func testMOV() {
     addToMemory([0x77])
     registers.h = 0x2B

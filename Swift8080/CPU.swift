@@ -23,6 +23,11 @@ class CPU {
     return memory[programCounter - 1]
   }
 
+  private func getNextTwoBytes() -> (UInt8, UInt8) {
+    let lowData = getNextByte()
+    return (getNextByte(), lowData)
+  }
+
   private func joinBytes(_ bytes: (UInt8, UInt8)) -> UInt16 {
     return UInt16(bytes.0) << 8 + UInt16(bytes.1)
   }
@@ -135,7 +140,7 @@ class CPU {
 
       switch byte {
       case 0x00: nop()
-      case 0x01: unimplementedInstruction(instruction: byte)
+      case 0x01: registerPairs.b = getNextTwoBytes()
       case 0x02: memory[Int(joinBytes(registerPairs.b))] = registers.a
       case 0x03: unimplementedInstruction(instruction: byte)
       case 0x04: unimplementedInstruction(instruction: byte)
@@ -151,7 +156,7 @@ class CPU {
       case 0x0E: registers.c = getNextByte()
       case 0x0F: rotate(.right)
       case 0x10: nop()
-      case 0x11: unimplementedInstruction(instruction: byte)
+      case 0x11: registerPairs.d = getNextTwoBytes()
       case 0x12: memory[Int(joinBytes(registerPairs.d))] = registers.a
       case 0x13: unimplementedInstruction(instruction: byte)
       case 0x14: unimplementedInstruction(instruction: byte)
@@ -167,7 +172,7 @@ class CPU {
       case 0x1E: registers.e = getNextByte()
       case 0x1F: rotate(.right, carry: true)
       case 0x20: unimplementedInstruction(instruction: byte)
-      case 0x21: unimplementedInstruction(instruction: byte)
+      case 0x21: registerPairs.h = getNextTwoBytes()
       case 0x22: unimplementedInstruction(instruction: byte)
       case 0x23: unimplementedInstruction(instruction: byte)
       case 0x24: unimplementedInstruction(instruction: byte)
@@ -183,7 +188,7 @@ class CPU {
       case 0x2E: registers.l = getNextByte()
       case 0x2F: unimplementedInstruction(instruction: byte)
       case 0x30: unimplementedInstruction(instruction: byte)
-      case 0x31: unimplementedInstruction(instruction: byte)
+      case 0x31: stackPointer = joinBytes(getNextTwoBytes())
       case 0x32: unimplementedInstruction(instruction: byte)
       case 0x33: unimplementedInstruction(instruction: byte)
       case 0x34: unimplementedInstruction(instruction: byte)
