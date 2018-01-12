@@ -72,6 +72,23 @@ class CPU {
     conditionBits.zero = registers.a == operand
   }
 
+  private func decimalAdjust() {
+    if registers.a & 0xF > 9 || conditionBits.auxiliaryCarry {
+      registers.a += 6
+      conditionBits.auxiliaryCarry = true
+    } else {
+      conditionBits.auxiliaryCarry = false
+    }
+
+    if registers.a & 0xF0 > 9 || conditionBits.carry {
+      let result = UInt16(registers.a) + 0x60
+      registers.a = UInt8(result & 0xFF)
+      conditionBits.setCarry(registers.a, result)
+    }
+
+    conditionBits.setParitySignZero(registers.a)
+  }
+
   private func decrement(_ operand: inout UInt8) {
     let nibbleResult = operand & 0xF + 0xF
     operand = operand &- 1
@@ -183,7 +200,7 @@ class CPU {
       case 0x24: increment(&registers.h)
       case 0x25: decrement(&registers.h)
       case 0x26: registers.h = getNextByte()
-      case 0x27: unimplementedInstruction(instruction: byte)
+      case 0x27: decimalAdjust()
       case 0x28: nop()
       case 0x29: unimplementedInstruction(instruction: byte)
       case 0x2A: unimplementedInstruction(instruction: byte)
