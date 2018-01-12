@@ -14,7 +14,7 @@ enum Direction {
 }
 
 class CPU {
-  private func flipBits(_ byte: UInt8) -> UInt8 {
+  private func getflippedNibble(_ byte: UInt8) -> UInt8 {
     return byte & 0xF ^ 0xF
   }
 
@@ -61,7 +61,7 @@ class CPU {
   }
 
   private func compare(_ operand: UInt8) {
-    let nibbleResult = registers.a & 0xF + flipBits(operand) + 1
+    let nibbleResult = registers.a & 0xF + getflippedNibble(operand) + 1
     let result = UInt16(registers.a) &- UInt16(operand)
     let result8 = UInt8(result & 0xFF)
 
@@ -116,7 +116,7 @@ class CPU {
   }
 
   private func sub(_ operand: UInt8, borrow: Bool = false) {
-    var nibbleResult = registers.a & 0xF + flipBits(operand) + 1
+    var nibbleResult = registers.a & 0xF + getflippedNibble(operand) + 1
     var result = UInt16(registers.a) &- UInt16(operand)
 
     if borrow {
