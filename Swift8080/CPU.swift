@@ -191,7 +191,7 @@ class CPU {
       case 0x2C: increment(&registers.l)
       case 0x2D: decrement(&registers.l)
       case 0x2E: registers.l = getNextByte()
-      case 0x2F: unimplementedInstruction(instruction: byte)
+      case 0x2F: registers.a ^= 0xFF
       case 0x30: unimplementedInstruction(instruction: byte)
       case 0x31: stackPointer = joinBytes(getNextTwoBytes())
       case 0x32: unimplementedInstruction(instruction: byte)
