@@ -85,13 +85,15 @@ struct RegisterPairs {
       registers.l = newValue.1
     }
   }
-  var psw: (UInt8, ConditionBits) {
+  var psw: (UInt8, UInt8) {
     get {
-      return (registers.a, conditionBits)
-    }
-    set {
-      registers.a = newValue.0
-      conditionBits = newValue.1
+      var conditionByte: UInt8 =                         0b00000010
+      if conditionBits.sign           { conditionByte ^= 0b10000000 }
+      if conditionBits.zero           { conditionByte ^= 0b01000000 }
+      if conditionBits.auxiliaryCarry { conditionByte ^= 0b00010000 }
+      if conditionBits.parity         { conditionByte ^= 0b00000100 }
+      if conditionBits.carry          { conditionByte ^= 0b00000001 }
+      return (registers.a, conditionByte)
     }
   }
 }

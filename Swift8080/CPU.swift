@@ -113,6 +113,16 @@ class CPU {
     conditionBits.setParitySignZero(registers.a)
   }
 
+  private func push(_ byte: UInt8) {
+    stackPointer -= 1
+    memory[Int(stackPointer)] = byte
+  }
+
+  private func push(_ bytes: (UInt8, UInt8)) {
+    push(bytes.0)
+    push(bytes.1)
+  }
+
   private func rotate(_ direction: Direction, carry: Bool = false) {
     let bitMask: UInt8 = direction == .left ? 0x80 : 0x01
     let carryValue = conditionBits.carry;
@@ -358,7 +368,7 @@ class CPU {
       case 0xC2: unimplementedInstruction(instruction: byte)
       case 0xC3: unimplementedInstruction(instruction: byte)
       case 0xC4: unimplementedInstruction(instruction: byte)
-      case 0xC5: unimplementedInstruction(instruction: byte)
+      case 0xC5: push(registerPairs.b)
       case 0xC6: add(getNextByte())
       case 0xC7: unimplementedInstruction(instruction: byte)
       case 0xC8: unimplementedInstruction(instruction: byte)
@@ -374,7 +384,7 @@ class CPU {
       case 0xD2: unimplementedInstruction(instruction: byte)
       case 0xD3: unimplementedInstruction(instruction: byte)
       case 0xD4: unimplementedInstruction(instruction: byte)
-      case 0xD5: unimplementedInstruction(instruction: byte)
+      case 0xD5: push(registerPairs.d)
       case 0xD6: sub(getNextByte())
       case 0xD7: unimplementedInstruction(instruction: byte)
       case 0xD8: unimplementedInstruction(instruction: byte)
@@ -390,7 +400,7 @@ class CPU {
       case 0xE2: unimplementedInstruction(instruction: byte)
       case 0xE3: unimplementedInstruction(instruction: byte)
       case 0xE4: unimplementedInstruction(instruction: byte)
-      case 0xE5: unimplementedInstruction(instruction: byte)
+      case 0xE5: push(registerPairs.h)
       case 0xE6: unimplementedInstruction(instruction: byte)
       case 0xE7: unimplementedInstruction(instruction: byte)
       case 0xE8: unimplementedInstruction(instruction: byte)
@@ -406,7 +416,7 @@ class CPU {
       case 0xF2: unimplementedInstruction(instruction: byte)
       case 0xF3: unimplementedInstruction(instruction: byte)
       case 0xF4: unimplementedInstruction(instruction: byte)
-      case 0xF5: unimplementedInstruction(instruction: byte)
+      case 0xF5: push(registerPairs.psw)
       case 0xF6: unimplementedInstruction(instruction: byte)
       case 0xF7: unimplementedInstruction(instruction: byte)
       case 0xF8: unimplementedInstruction(instruction: byte)
