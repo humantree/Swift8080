@@ -113,6 +113,18 @@ class CPU {
     conditionBits.setParitySignZero(registers.a)
   }
 
+  private func pop() -> (UInt8, UInt8) {
+    let second = popByte()
+    let first = popByte()
+    return (first, second)
+  }
+
+  private func popByte() -> UInt8 {
+    let byte = memory[Int(stackPointer)]
+    stackPointer += 1
+    return byte
+  }
+
   private func push(_ byte: UInt8) {
     stackPointer -= 1
     memory[Int(stackPointer)] = byte
@@ -364,7 +376,7 @@ class CPU {
       case 0xBE: compare(registers.m)
       case 0xBF: compare(registers.a)
       case 0xC0: unimplementedInstruction(instruction: byte)
-      case 0xC1: unimplementedInstruction(instruction: byte)
+      case 0xC1: registerPairs.b = pop()
       case 0xC2: unimplementedInstruction(instruction: byte)
       case 0xC3: unimplementedInstruction(instruction: byte)
       case 0xC4: unimplementedInstruction(instruction: byte)
@@ -380,7 +392,7 @@ class CPU {
       case 0xCE: add(getNextByte(), carry: true)
       case 0xCF: unimplementedInstruction(instruction: byte)
       case 0xD0: unimplementedInstruction(instruction: byte)
-      case 0xD1: unimplementedInstruction(instruction: byte)
+      case 0xD1: registerPairs.d = pop()
       case 0xD2: unimplementedInstruction(instruction: byte)
       case 0xD3: unimplementedInstruction(instruction: byte)
       case 0xD4: unimplementedInstruction(instruction: byte)
@@ -396,7 +408,7 @@ class CPU {
       case 0xDE: sub(getNextByte(), borrow: true)
       case 0xDF: unimplementedInstruction(instruction: byte)
       case 0xE0: unimplementedInstruction(instruction: byte)
-      case 0xE1: unimplementedInstruction(instruction: byte)
+      case 0xE1: registerPairs.h = pop()
       case 0xE2: unimplementedInstruction(instruction: byte)
       case 0xE3: unimplementedInstruction(instruction: byte)
       case 0xE4: unimplementedInstruction(instruction: byte)
@@ -412,7 +424,7 @@ class CPU {
       case 0xEE: unimplementedInstruction(instruction: byte)
       case 0xEF: unimplementedInstruction(instruction: byte)
       case 0xF0: unimplementedInstruction(instruction: byte)
-      case 0xF1: unimplementedInstruction(instruction: byte)
+      case 0xF1: registerPairs.psw = pop()
       case 0xF2: unimplementedInstruction(instruction: byte)
       case 0xF3: unimplementedInstruction(instruction: byte)
       case 0xF4: unimplementedInstruction(instruction: byte)

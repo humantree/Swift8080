@@ -85,6 +85,7 @@ struct RegisterPairs {
       registers.l = newValue.1
     }
   }
+
   var psw: (UInt8, UInt8) {
     get {
       var conditionByte: UInt8 =                         0b00000010
@@ -94,6 +95,14 @@ struct RegisterPairs {
       if conditionBits.parity         { conditionByte ^= 0b00000100 }
       if conditionBits.carry          { conditionByte ^= 0b00000001 }
       return (registers.a, conditionByte)
+    }
+    set {
+      registers.a = newValue.0
+      conditionBits.sign = newValue.1 &           0b10000000 == 0b10000000
+      conditionBits.zero = newValue.1 &           0b01000000 == 0b01000000
+      conditionBits.auxiliaryCarry = newValue.1 & 0b00010000 == 0b00010000
+      conditionBits.parity = newValue.1 &         0b00000100 == 0b00000100
+      conditionBits.carry = newValue.1 &          0b00000001 == 0b00000001
     }
   }
 }

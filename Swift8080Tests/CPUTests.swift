@@ -303,6 +303,36 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testPOP1() {
+    addToMemory([0xE1])
+    memory[0x1239] = 0x3D
+    memory[0x123A] = 0x93
+    stackPointer = 0x1239
+
+    cpu.start()
+
+    XCTAssertEqual(registers.l, 0x3D)
+    XCTAssertEqual(registers.h, 0x93)
+    XCTAssertEqual(stackPointer, 0x123B)
+  }
+
+  func testPOP2() {
+    addToMemory([0xF1])
+    memory[0x2C00] = 0xC3
+    memory[0x2C01] = 0xFF
+    stackPointer = 0x2C00
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0xFF)
+    XCTAssertEqual(stackPointer, 0x2C02)
+    XCTAssertFalse(conditionBits.auxiliaryCarry)
+    XCTAssertTrue(conditionBits.carry)
+    XCTAssertFalse(conditionBits.parity)
+    XCTAssertTrue(conditionBits.sign)
+    XCTAssertTrue(conditionBits.zero)
+  }
+
   func testPUSH1() {
     addToMemory([0xD5])
     registers.d = 0x8F
