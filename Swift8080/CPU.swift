@@ -112,6 +112,12 @@ class CPU {
     operand = splitBytes(joinBytes(operand) &- 1)
   }
 
+  private func exchange() {
+    let temporary = registerPairs.h
+    registerPairs.h = registerPairs.d
+    registerPairs.d = temporary
+  }
+
   private func increment(_ operand: inout UInt8) {
     operand = operand &+ 1
 
@@ -437,7 +443,7 @@ class CPU {
       case 0xE8: unimplementedInstruction(instruction: byte)
       case 0xE9: unimplementedInstruction(instruction: byte)
       case 0xEA: unimplementedInstruction(instruction: byte)
-      case 0xEB: unimplementedInstruction(instruction: byte)
+      case 0xEB: exchange()
       case 0xEC: unimplementedInstruction(instruction: byte)
       case 0xED: nop()
       case 0xEE: unimplementedInstruction(instruction: byte)
