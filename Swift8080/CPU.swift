@@ -32,6 +32,10 @@ class CPU {
     return UInt16(bytes.0) << 8 + UInt16(bytes.1)
   }
 
+  private func splitBytes(_ double: UInt16) -> (UInt8, UInt8) {
+    return (UInt8(double >> 8), UInt8(double & 0xFF))
+  }
+
   private func unimplementedInstruction(instruction: UInt8) {
     let hex = String(format: "%02X", instruction)
     print("Error: Unimplemented instruction (\(hex))")
@@ -51,6 +55,13 @@ class CPU {
     conditionBits.setAuxiliaryCarry(nibbleResult)
     conditionBits.setCarry(registers.a, result)
     conditionBits.setParitySignZero(registers.a)
+  }
+
+  private func add(_ operand: UInt16) {
+    let result = UInt32(joinBytes(registerPairs.h)) + UInt32(operand)
+
+    registerPairs.h = splitBytes(UInt16(result & 0xFFFF))
+    conditionBits.setCarry(registers.h, UInt16(result >> 8))
   }
 
   private func and(_ operand: UInt8) {
@@ -192,7 +203,7 @@ class CPU {
       case 0x06: registers.b = getNextByte()
       case 0x07: rotate(.left)
       case 0x08: nop()
-      case 0x09: unimplementedInstruction(instruction: byte)
+      case 0x09: add(joinBytes(registerPairs.b))
       case 0x0A: registers.a = memory[Int(joinBytes(registerPairs.b))]
       case 0x0B: unimplementedInstruction(instruction: byte)
       case 0x0C: increment(&registers.c)
@@ -208,7 +219,7 @@ class CPU {
       case 0x16: registers.d = getNextByte()
       case 0x17: rotate(.left, carry: true)
       case 0x18: nop()
-      case 0x19: unimplementedInstruction(instruction: byte)
+      case 0x19: add(joinBytes(registerPairs.d))
       case 0x1A: registers.a = memory[Int(joinBytes(registerPairs.d))]
       case 0x1B: unimplementedInstruction(instruction: byte)
       case 0x1C: increment(&registers.e)
@@ -224,7 +235,7 @@ class CPU {
       case 0x26: registers.h = getNextByte()
       case 0x27: decimalAdjust()
       case 0x28: nop()
-      case 0x29: unimplementedInstruction(instruction: byte)
+      case 0x29: add(joinBytes(registerPairs.h))
       case 0x2A: unimplementedInstruction(instruction: byte)
       case 0x2B: unimplementedInstruction(instruction: byte)
       case 0x2C: increment(&registers.l)
@@ -240,7 +251,7 @@ class CPU {
       case 0x36: registers.m = getNextByte()
       case 0x37: conditionBits.carry = true
       case 0x38: nop()
-      case 0x39: unimplementedInstruction(instruction: byte)
+      case 0x39: add(stackPointer)
       case 0x3A: unimplementedInstruction(instruction: byte)
       case 0x3B: unimplementedInstruction(instruction: byte)
       case 0x3C: increment(&registers.a)
