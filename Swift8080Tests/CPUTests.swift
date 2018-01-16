@@ -599,7 +599,6 @@ class CPUTests: XCTestCase {
     cpu.start()
 
     XCTAssertEqual(registers.a, 0x24)
-    XCTAssertFalse(conditionBits.auxiliaryCarry)
     XCTAssertFalse(conditionBits.carry)
     XCTAssertTrue(conditionBits.parity)
     XCTAssertFalse(conditionBits.sign)

@@ -206,7 +206,6 @@ class CPU {
   private func xor(_ operand: UInt8) {
     registers.a = registers.a ^ operand
 
-    conditionBits.auxiliaryCarry = false
     conditionBits.carry = false
     conditionBits.setParitySignZero(registers.a)
   }
