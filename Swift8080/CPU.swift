@@ -118,6 +118,14 @@ class CPU {
     registerPairs.d = temporary
   }
 
+  private func exchangeStack() {
+    let temporary = (memory[Int(stackPointer + 1)],
+                     memory[Int(stackPointer)])
+    memory[Int(stackPointer + 1)] = registers.h
+    memory[Int(stackPointer)] = registers.l
+    registerPairs.h = temporary
+  }
+
   private func increment(_ operand: inout UInt8) {
     operand = operand &+ 1
 
@@ -435,7 +443,7 @@ class CPU {
       case 0xE0: unimplementedInstruction(instruction: byte)
       case 0xE1: registerPairs.h = pop()
       case 0xE2: unimplementedInstruction(instruction: byte)
-      case 0xE3: unimplementedInstruction(instruction: byte)
+      case 0xE3: exchangeStack()
       case 0xE4: unimplementedInstruction(instruction: byte)
       case 0xE5: push(registerPairs.h)
       case 0xE6: unimplementedInstruction(instruction: byte)
