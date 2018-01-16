@@ -133,6 +133,19 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testANI() {
+    addToMemory([0xE6, 0x0F])
+    registers.a = 0x3A
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x0A)
+    XCTAssertFalse(conditionBits.carry)
+    XCTAssertTrue(conditionBits.parity)
+    XCTAssertFalse(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
+
   func testCMA() {
     addToMemory([0x2F])
     registers.a = 0x51

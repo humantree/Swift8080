@@ -446,7 +446,7 @@ class CPU {
       case 0xE3: exchangeStack()
       case 0xE4: unimplementedInstruction(instruction: byte)
       case 0xE5: push(registerPairs.h)
-      case 0xE6: unimplementedInstruction(instruction: byte)
+      case 0xE6: and(getNextByte())
       case 0xE7: unimplementedInstruction(instruction: byte)
       case 0xE8: unimplementedInstruction(instruction: byte)
       case 0xE9: unimplementedInstruction(instruction: byte)
