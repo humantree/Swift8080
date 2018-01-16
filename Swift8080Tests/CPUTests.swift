@@ -605,4 +605,17 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.sign)
     XCTAssertFalse(conditionBits.zero)
   }
+
+  func testXRI() {
+    addToMemory([0xEE, 0x81])
+    registers.a = 0x3B
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0xBA)
+    XCTAssertFalse(conditionBits.carry)
+    XCTAssertFalse(conditionBits.parity)
+    XCTAssertTrue(conditionBits.sign)
+    XCTAssertFalse(conditionBits.zero)
+  }
 }

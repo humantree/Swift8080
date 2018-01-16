@@ -454,7 +454,7 @@ class CPU {
       case 0xEB: exchange()
       case 0xEC: unimplementedInstruction(instruction: byte)
       case 0xED: nop()
-      case 0xEE: unimplementedInstruction(instruction: byte)
+      case 0xEE: xor(getNextByte())
       case 0xEF: unimplementedInstruction(instruction: byte)
       case 0xF0: unimplementedInstruction(instruction: byte)
       case 0xF1: registerPairs.psw = pop()
