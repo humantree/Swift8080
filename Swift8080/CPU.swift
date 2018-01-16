@@ -465,7 +465,7 @@ class CPU {
       case 0xF6: unimplementedInstruction(instruction: byte)
       case 0xF7: unimplementedInstruction(instruction: byte)
       case 0xF8: unimplementedInstruction(instruction: byte)
-      case 0xF9: unimplementedInstruction(instruction: byte)
+      case 0xF9: stackPointer = joinBytes(registerPairs.h)
       case 0xFA: unimplementedInstruction(instruction: byte)
       case 0xFB: unimplementedInstruction(instruction: byte)
       case 0xFC: unimplementedInstruction(instruction: byte)

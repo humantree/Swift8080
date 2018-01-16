@@ -489,6 +489,16 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testSPHL() {
+    addToMemory([0xF9])
+    registers.h = 0x50
+    registers.l = 0x6C
+
+    cpu.start()
+
+    XCTAssertEqual(stackPointer, 0x506C)
+  }
+
   func testSTAX() {
     addToMemory([0x02])
     registers.a = 0x60
