@@ -108,6 +108,10 @@ class CPU {
     conditionBits.setParitySignZero(operand)
   }
 
+  private func decrement(_ operand: inout (UInt8, UInt8)) {
+    operand = splitBytes(joinBytes(operand) &- 1)
+  }
+
   private func increment(_ operand: inout UInt8) {
     operand = operand &+ 1
 
@@ -209,7 +213,7 @@ class CPU {
       case 0x08: nop()
       case 0x09: add(joinBytes(registerPairs.b))
       case 0x0A: registers.a = memory[Int(joinBytes(registerPairs.b))]
-      case 0x0B: unimplementedInstruction(instruction: byte)
+      case 0x0B: decrement(&registerPairs.b)
       case 0x0C: increment(&registers.c)
       case 0x0D: decrement(&registers.c)
       case 0x0E: registers.c = getNextByte()
@@ -225,7 +229,7 @@ class CPU {
       case 0x18: nop()
       case 0x19: add(joinBytes(registerPairs.d))
       case 0x1A: registers.a = memory[Int(joinBytes(registerPairs.d))]
-      case 0x1B: unimplementedInstruction(instruction: byte)
+      case 0x1B: decrement(&registerPairs.d)
       case 0x1C: increment(&registers.e)
       case 0x1D: decrement(&registers.e)
       case 0x1E: registers.e = getNextByte()
@@ -241,7 +245,7 @@ class CPU {
       case 0x28: nop()
       case 0x29: add(joinBytes(registerPairs.h))
       case 0x2A: unimplementedInstruction(instruction: byte)
-      case 0x2B: unimplementedInstruction(instruction: byte)
+      case 0x2B: decrement(&registerPairs.h)
       case 0x2C: increment(&registers.l)
       case 0x2D: decrement(&registers.l)
       case 0x2E: registers.l = getNextByte()
@@ -257,7 +261,7 @@ class CPU {
       case 0x38: nop()
       case 0x39: add(stackPointer)
       case 0x3A: unimplementedInstruction(instruction: byte)
-      case 0x3B: unimplementedInstruction(instruction: byte)
+      case 0x3B: stackPointer = stackPointer &- 1
       case 0x3C: increment(&registers.a)
       case 0x3D: decrement(&registers.a)
       case 0x3E: registers.a = getNextByte()
