@@ -469,7 +469,7 @@ class CPU {
       case 0xFB: unimplementedInstruction(instruction: byte)
       case 0xFC: unimplementedInstruction(instruction: byte)
       case 0xFD: nop()
-      case 0xFE: unimplementedInstruction(instruction: byte)
+      case 0xFE: compare(getNextByte())
       case 0xFF: unimplementedInstruction(instruction: byte)
       default: unimplementedInstruction(instruction: byte)
       }
