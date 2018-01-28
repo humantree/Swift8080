@@ -419,6 +419,20 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.zero)
   }
 
+  func testPCHL() {
+    addToMemory([0xE9])
+    registers.a = 0x34
+    registers.h = 0x41
+    registers.l = 0x3E
+    memory[0x413D] = 0x47
+    memory[0x413E] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x00)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
   func testPOP1() {
     addToMemory([0xE1])
     memory[0x1239] = 0x3D

@@ -450,7 +450,7 @@ class CPU {
       case 0xE6: and(getNextByte())
       case 0xE7: unimplementedInstruction(instruction: byte)
       case 0xE8: unimplementedInstruction(instruction: byte)
-      case 0xE9: unimplementedInstruction(instruction: byte)
+      case 0xE9: programCounter = Int(joinBytes(registerPairs.h))
       case 0xEA: unimplementedInstruction(instruction: byte)
       case 0xEB: exchange()
       case 0xEC: unimplementedInstruction(instruction: byte)
