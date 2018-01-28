@@ -257,7 +257,7 @@ class CPU {
       case 0x2F: registers.a ^= 0xFF
       case 0x30: unimplementedInstruction(instruction: byte)
       case 0x31: stackPointer = joinBytes(getNextTwoBytes())
-      case 0x32: unimplementedInstruction(instruction: byte)
+      case 0x32: memory[Int(joinBytes(getNextTwoBytes()))] = registers.a
       case 0x33: stackPointer = stackPointer &+ 1
       case 0x34: increment(&registers.m)
       case 0x35: decrement(&registers.m)
@@ -265,7 +265,7 @@ class CPU {
       case 0x37: conditionBits.carry = true
       case 0x38: nop()
       case 0x39: add(stackPointer)
-      case 0x3A: unimplementedInstruction(instruction: byte)
+      case 0x3A: registers.a = memory[Int(joinBytes(getNextTwoBytes()))]
       case 0x3B: stackPointer = stackPointer &- 1
       case 0x3C: increment(&registers.a)
       case 0x3D: decrement(&registers.a)

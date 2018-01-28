@@ -318,6 +318,15 @@ class CPUTests: XCTestCase {
     XCTAssertEqual(stackPointer, 0x0000)
   }
 
+  func testLDA() {
+    addToMemory([0x3A, 0x00, 0x03])
+    memory[0x0300] = 0x47
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x47)
+  }
+
   func testLDAX() {
     addToMemory([0x1A])
     memory[0x938B] = 0x2D
@@ -536,6 +545,15 @@ class CPUTests: XCTestCase {
     cpu.start()
 
     XCTAssertEqual(stackPointer, 0x506C)
+  }
+
+  func testSTA() {
+    addToMemory([0x32, 0xB3, 0x05])
+    registers.a = 0x8C
+
+    cpu.start()
+
+    XCTAssertEqual(memory[0x05B3], 0x8C)
   }
 
   func testSTAX() {
