@@ -14,10 +14,6 @@ enum Direction {
 }
 
 class CPU {
-  private func getflippedNibble(_ byte: UInt8) -> UInt8 {
-    return byte & 0xF ^ 0xF
-  }
-
   private func getNextByte() -> UInt8 {
     programCounter += 1
     return memory[programCounter - 1]
@@ -69,18 +65,6 @@ class CPU {
 
     conditionBits.carry = false
     conditionBits.setParitySignZero(registers.a)
-  }
-
-  private func compare(_ operand: UInt8) {
-    let nibbleResult = registers.a & 0xF + getflippedNibble(operand) + 1
-    let result = UInt16(registers.a) &- UInt16(operand)
-    let result8 = UInt8(result & 0xFF)
-
-    conditionBits.setAuxiliaryCarry(nibbleResult)
-    conditionBits.setCarry(result8, result)
-    conditionBits.setSign(result8)
-    conditionBits.setParity(result8)
-    conditionBits.zero = registers.a == operand
   }
 
   private func decimalAdjust() {
@@ -187,8 +171,12 @@ class CPU {
     registers.a = UInt8(rotated & 0xFF)
   }
 
-  private func sub(_ operand: UInt8, borrow: Bool = false) {
-    var nibbleResult = registers.a & 0xF + getflippedNibble(operand) + 1
+  private func sub(_ operand: UInt8,
+                   borrow: Bool = false,
+                   saveResult: Bool = true) {
+
+    let flippedNibble = operand & 0xF ^ 0xF
+    var nibbleResult = registers.a & 0xF + flippedNibble + 1
     var result = UInt16(registers.a) &- UInt16(operand)
 
     if borrow {
@@ -196,11 +184,15 @@ class CPU {
       result -= UInt16(conditionBits.carry.hashValue)
     }
 
-    registers.a = UInt8(result & 0xFF)
-    
+    let result8 = UInt8(result & 0xFF)
+
     conditionBits.setAuxiliaryCarry(nibbleResult)
-    conditionBits.setCarry(registers.a, result)
-    conditionBits.setParitySignZero(registers.a)
+    conditionBits.setCarry(result8, result)
+    conditionBits.setParitySignZero(result8)
+
+    if saveResult {
+      registers.a = result8
+    }
   }
 
   private func xor(_ operand: UInt8) {
@@ -399,14 +391,14 @@ class CPU {
       case 0xB5: or(registers.l)
       case 0xB6: or(registers.m)
       case 0xB7: or(registers.a)
-      case 0xB8: compare(registers.b)
-      case 0xB9: compare(registers.c)
-      case 0xBA: compare(registers.d)
-      case 0xBB: compare(registers.e)
-      case 0xBC: compare(registers.h)
-      case 0xBD: compare(registers.l)
-      case 0xBE: compare(registers.m)
-      case 0xBF: compare(registers.a)
+      case 0xB8: sub(registers.b, saveResult: false)
+      case 0xB9: sub(registers.c, saveResult: false)
+      case 0xBA: sub(registers.d, saveResult: false)
+      case 0xBB: sub(registers.e, saveResult: false)
+      case 0xBC: sub(registers.h, saveResult: false)
+      case 0xBD: sub(registers.l, saveResult: false)
+      case 0xBE: sub(registers.m, saveResult: false)
+      case 0xBF: sub(registers.a, saveResult: false)
       case 0xC0: unimplementedInstruction(instruction: byte)
       case 0xC1: registerPairs.b = pop()
       case 0xC2: unimplementedInstruction(instruction: byte)
@@ -469,7 +461,7 @@ class CPU {
       case 0xFB: unimplementedInstruction(instruction: byte)
       case 0xFC: unimplementedInstruction(instruction: byte)
       case 0xFD: nop()
-      case 0xFE: compare(getNextByte())
+      case 0xFE: sub(getNextByte(), saveResult: false)
       case 0xFF: unimplementedInstruction(instruction: byte)
       default: unimplementedInstruction(instruction: byte)
       }
