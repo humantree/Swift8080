@@ -338,6 +338,17 @@ class CPUTests: XCTestCase {
     XCTAssertEqual(registers.a, 0x2D)
   }
 
+  func testLHLD() {
+    addToMemory([0x2A, 0x5B, 0x02])
+    memory[0x025B] = 0xFF
+    memory[0x025C] = 0x03
+
+    cpu.start()
+
+    XCTAssertEqual(registers.h, 0x03)
+    XCTAssertEqual(registers.l, 0xFF)
+  }
+
   func testLXI1() {
     addToMemory([0x21, 0x03, 0x01])
 
@@ -535,6 +546,17 @@ class CPUTests: XCTestCase {
     XCTAssertFalse(conditionBits.parity)
     XCTAssertTrue(conditionBits.sign)
     XCTAssertFalse(conditionBits.zero)
+  }
+
+  func testSHLD() {
+    addToMemory([0x22, 0x0A, 0x01])
+    registers.h = 0xAE
+    registers.l = 0x29
+
+    cpu.start()
+
+    XCTAssertEqual(memory[0x010A], 0x29)
+    XCTAssertEqual(memory[0x010B], 0xAE)
   }
 
   func testSPHL() {

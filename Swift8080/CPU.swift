@@ -121,6 +121,11 @@ class CPU {
     operand = splitBytes(joinBytes(operand) &+ 1)
   }
 
+  private func load(_ address: UInt16) {
+    registers.l = memory[Int(address)]
+    registers.h = memory[Int(address + 1)]
+  }
+
   private func nop() { }
 
   private func or(_ operand: UInt8) {
@@ -169,6 +174,11 @@ class CPU {
     }
 
     registers.a = UInt8(rotated & 0xFF)
+  }
+
+  private func store(_ address: UInt16) {
+    memory[Int(address)] = registers.l
+    memory[Int(address + 1)] = registers.h
   }
 
   private func sub(_ operand: UInt8,
@@ -241,7 +251,7 @@ class CPU {
       case 0x1F: rotate(.right, carry: true)
       case 0x20: unimplementedInstruction(instruction: byte)
       case 0x21: registerPairs.h = getNextTwoBytes()
-      case 0x22: unimplementedInstruction(instruction: byte)
+      case 0x22: store(joinBytes(getNextTwoBytes()))
       case 0x23: increment(&registerPairs.h)
       case 0x24: increment(&registers.h)
       case 0x25: decrement(&registers.h)
@@ -249,7 +259,7 @@ class CPU {
       case 0x27: decimalAdjust()
       case 0x28: nop()
       case 0x29: add(joinBytes(registerPairs.h))
-      case 0x2A: unimplementedInstruction(instruction: byte)
+      case 0x2A: load(joinBytes(getNextTwoBytes()))
       case 0x2B: decrement(&registerPairs.h)
       case 0x2C: increment(&registers.l)
       case 0x2D: decrement(&registers.l)
