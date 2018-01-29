@@ -244,6 +244,7 @@ enum Opcode: UInt8 {
   // MARK: Direct addressing instructions
   case STA  = 0x32
   case LDA  = 0x3A
+
   case SHLD = 0x22
   case LHLD = 0x2A
 

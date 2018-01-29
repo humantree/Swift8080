@@ -32,11 +32,13 @@ class CPU {
     return (UInt8(double >> 8), UInt8(double & 0xFF))
   }
 
-  private func unimplementedInstruction(instruction: UInt8) {
-    let hex = String(format: "%02X", instruction)
+  private func unimplementedInstruction(instruction: Opcode) {
+    let hex = String(format: "%02X", instruction.rawValue)
     print("Error: Unimplemented instruction (\(hex))")
   }
-  
+
+  // MARK: -
+
   private func add(_ operand: UInt8, carry: Bool = false) {
     var nibbleResult = registers.a & 0xF + operand & 0xF
     var result = UInt16(registers.a) + UInt16(operand)
@@ -217,268 +219,319 @@ class CPU {
     conditionBits.setParitySignZero(registers.a)
   }
 
+  // MARK: -
+
   func start() {
     while programCounter < memory.count {
-      let byte = getNextByte()
+      let opcode = Opcode(rawValue: getNextByte())!
 
-      switch byte {
-      case 0x00: nop()
-      case 0x01: registerPairs.b = getNextTwoBytes()
-      case 0x02: memory[Int(joinBytes(registerPairs.b))] = registers.a
-      case 0x03: increment(&registerPairs.b)
-      case 0x04: increment(&registers.b)
-      case 0x05: decrement(&registers.b)
-      case 0x06: registers.b = getNextByte()
-      case 0x07: rotate(.left)
-      case 0x08: nop()
-      case 0x09: add(joinBytes(registerPairs.b))
-      case 0x0A: registers.a = memory[Int(joinBytes(registerPairs.b))]
-      case 0x0B: decrement(&registerPairs.b)
-      case 0x0C: increment(&registers.c)
-      case 0x0D: decrement(&registers.c)
-      case 0x0E: registers.c = getNextByte()
-      case 0x0F: rotate(.right)
-      case 0x10: nop()
-      case 0x11: registerPairs.d = getNextTwoBytes()
-      case 0x12: memory[Int(joinBytes(registerPairs.d))] = registers.a
-      case 0x13: increment(&registerPairs.d)
-      case 0x14: increment(&registers.d)
-      case 0x15: decrement(&registers.d)
-      case 0x16: registers.d = getNextByte()
-      case 0x17: rotate(.left, carry: true)
-      case 0x18: nop()
-      case 0x19: add(joinBytes(registerPairs.d))
-      case 0x1A: registers.a = memory[Int(joinBytes(registerPairs.d))]
-      case 0x1B: decrement(&registerPairs.d)
-      case 0x1C: increment(&registers.e)
-      case 0x1D: decrement(&registers.e)
-      case 0x1E: registers.e = getNextByte()
-      case 0x1F: rotate(.right, carry: true)
-      case 0x20: unimplementedInstruction(instruction: byte)
-      case 0x21: registerPairs.h = getNextTwoBytes()
-      case 0x22: store(joinBytes(getNextTwoBytes()))
-      case 0x23: increment(&registerPairs.h)
-      case 0x24: increment(&registers.h)
-      case 0x25: decrement(&registers.h)
-      case 0x26: registers.h = getNextByte()
-      case 0x27: decimalAdjust()
-      case 0x28: nop()
-      case 0x29: add(joinBytes(registerPairs.h))
-      case 0x2A: load(joinBytes(getNextTwoBytes()))
-      case 0x2B: decrement(&registerPairs.h)
-      case 0x2C: increment(&registers.l)
-      case 0x2D: decrement(&registers.l)
-      case 0x2E: registers.l = getNextByte()
-      case 0x2F: registers.a ^= 0xFF
-      case 0x30: unimplementedInstruction(instruction: byte)
-      case 0x31: stackPointer = joinBytes(getNextTwoBytes())
-      case 0x32: memory[Int(joinBytes(getNextTwoBytes()))] = registers.a
-      case 0x33: stackPointer = stackPointer &+ 1
-      case 0x34: increment(&registers.m)
-      case 0x35: decrement(&registers.m)
-      case 0x36: registers.m = getNextByte()
-      case 0x37: conditionBits.carry = true
-      case 0x38: nop()
-      case 0x39: add(stackPointer)
-      case 0x3A: registers.a = memory[Int(joinBytes(getNextTwoBytes()))]
-      case 0x3B: stackPointer = stackPointer &- 1
-      case 0x3C: increment(&registers.a)
-      case 0x3D: decrement(&registers.a)
-      case 0x3E: registers.a = getNextByte()
-      case 0x3F: conditionBits.carry = !conditionBits.carry
-      case 0x40: nop()
-      case 0x41: registers.b = registers.c
-      case 0x42: registers.b = registers.d
-      case 0x43: registers.b = registers.e
-      case 0x44: registers.b = registers.h
-      case 0x45: registers.b = registers.l
-      case 0x46: registers.b = registers.m
-      case 0x47: registers.b = registers.a
-      case 0x48: registers.c = registers.b
-      case 0x49: nop()
-      case 0x4A: registers.c = registers.d
-      case 0x4B: registers.c = registers.e
-      case 0x4C: registers.c = registers.h
-      case 0x4D: registers.c = registers.l
-      case 0x4E: registers.c = registers.m
-      case 0x4F: registers.c = registers.a
-      case 0x50: registers.d = registers.b
-      case 0x51: registers.d = registers.c
-      case 0x52: nop()
-      case 0x53: registers.d = registers.e
-      case 0x54: registers.d = registers.h
-      case 0x55: registers.d = registers.l
-      case 0x56: registers.d = registers.m
-      case 0x57: registers.d = registers.a
-      case 0x58: registers.e = registers.b
-      case 0x59: registers.e = registers.c
-      case 0x5A: registers.e = registers.d
-      case 0x5B: nop()
-      case 0x5C: registers.e = registers.h
-      case 0x5D: registers.e = registers.l
-      case 0x5E: registers.e = registers.m
-      case 0x5F: registers.e = registers.a
-      case 0x60: registers.h = registers.b
-      case 0x61: registers.h = registers.c
-      case 0x62: registers.h = registers.d
-      case 0x63: registers.h = registers.e
-      case 0x64: nop()
-      case 0x65: registers.h = registers.l
-      case 0x66: registers.h = registers.m
-      case 0x67: registers.h = registers.a
-      case 0x68: registers.l = registers.b
-      case 0x69: registers.l = registers.c
-      case 0x6A: registers.l = registers.d
-      case 0x6B: registers.l = registers.e
-      case 0x6C: registers.l = registers.h
-      case 0x6D: nop()
-      case 0x6E: registers.l = registers.m
-      case 0x6F: registers.l = registers.a
-      case 0x70: registers.m = registers.b
-      case 0x71: registers.m = registers.c
-      case 0x72: registers.m = registers.d
-      case 0x73: registers.m = registers.e
-      case 0x74: registers.m = registers.h
-      case 0x75: registers.m = registers.l
-      case 0x76: unimplementedInstruction(instruction: byte)
-      case 0x77: registers.m = registers.a
-      case 0x78: registers.a = registers.b
-      case 0x79: registers.a = registers.c
-      case 0x7A: registers.a = registers.d
-      case 0x7B: registers.a = registers.e
-      case 0x7C: registers.a = registers.h
-      case 0x7D: registers.a = registers.l
-      case 0x7E: registers.a = registers.m
-      case 0x7F: nop()
-      case 0x80: add(registers.b)
-      case 0x81: add(registers.c)
-      case 0x82: add(registers.d)
-      case 0x83: add(registers.e)
-      case 0x84: add(registers.h)
-      case 0x85: add(registers.l)
-      case 0x86: add(registers.m)
-      case 0x87: add(registers.a)
-      case 0x88: add(registers.b, carry: true)
-      case 0x89: add(registers.c, carry: true)
-      case 0x8A: add(registers.d, carry: true)
-      case 0x8B: add(registers.e, carry: true)
-      case 0x8C: add(registers.h, carry: true)
-      case 0x8D: add(registers.l, carry: true)
-      case 0x8E: add(registers.m, carry: true)
-      case 0x8F: add(registers.a, carry: true)
-      case 0x90: sub(registers.b)
-      case 0x91: sub(registers.c)
-      case 0x92: sub(registers.d)
-      case 0x93: sub(registers.e)
-      case 0x94: sub(registers.h)
-      case 0x95: sub(registers.l)
-      case 0x96: sub(registers.m)
-      case 0x97: sub(registers.a)
-      case 0x98: sub(registers.b, borrow: true)
-      case 0x99: sub(registers.c, borrow: true)
-      case 0x9A: sub(registers.d, borrow: true)
-      case 0x9B: sub(registers.e, borrow: true)
-      case 0x9C: sub(registers.h, borrow: true)
-      case 0x9D: sub(registers.l, borrow: true)
-      case 0x9E: sub(registers.m, borrow: true)
-      case 0x9F: sub(registers.a, borrow: true)
-      case 0xA0: and(registers.b)
-      case 0xA1: and(registers.c)
-      case 0xA2: and(registers.d)
-      case 0xA3: and(registers.e)
-      case 0xA4: and(registers.h)
-      case 0xA5: and(registers.l)
-      case 0xA6: and(registers.m)
-      case 0xA7: and(registers.a)
-      case 0xA8: xor(registers.b)
-      case 0xA9: xor(registers.c)
-      case 0xAA: xor(registers.d)
-      case 0xAB: xor(registers.e)
-      case 0xAC: xor(registers.h)
-      case 0xAD: xor(registers.l)
-      case 0xAE: xor(registers.m)
-      case 0xAF: xor(registers.a)
-      case 0xB0: or(registers.b)
-      case 0xB1: or(registers.c)
-      case 0xB2: or(registers.d)
-      case 0xB3: or(registers.e)
-      case 0xB4: or(registers.h)
-      case 0xB5: or(registers.l)
-      case 0xB6: or(registers.m)
-      case 0xB7: or(registers.a)
-      case 0xB8: sub(registers.b, saveResult: false)
-      case 0xB9: sub(registers.c, saveResult: false)
-      case 0xBA: sub(registers.d, saveResult: false)
-      case 0xBB: sub(registers.e, saveResult: false)
-      case 0xBC: sub(registers.h, saveResult: false)
-      case 0xBD: sub(registers.l, saveResult: false)
-      case 0xBE: sub(registers.m, saveResult: false)
-      case 0xBF: sub(registers.a, saveResult: false)
-      case 0xC0: unimplementedInstruction(instruction: byte)
-      case 0xC1: registerPairs.b = pop()
-      case 0xC2: jump(condition: !conditionBits.zero)
-      case 0xC3: jump()
-      case 0xC4: unimplementedInstruction(instruction: byte)
-      case 0xC5: push(registerPairs.b)
-      case 0xC6: add(getNextByte())
-      case 0xC7: unimplementedInstruction(instruction: byte)
-      case 0xC8: unimplementedInstruction(instruction: byte)
-      case 0xC9: unimplementedInstruction(instruction: byte)
-      case 0xCA: jump(condition: conditionBits.zero)
-      case 0xCB: nop()
-      case 0xCC: unimplementedInstruction(instruction: byte)
-      case 0xCD: unimplementedInstruction(instruction: byte)
-      case 0xCE: add(getNextByte(), carry: true)
-      case 0xCF: unimplementedInstruction(instruction: byte)
-      case 0xD0: unimplementedInstruction(instruction: byte)
-      case 0xD1: registerPairs.d = pop()
-      case 0xD2: jump(condition: !conditionBits.carry)
-      case 0xD3: unimplementedInstruction(instruction: byte)
-      case 0xD4: unimplementedInstruction(instruction: byte)
-      case 0xD5: push(registerPairs.d)
-      case 0xD6: sub(getNextByte())
-      case 0xD7: unimplementedInstruction(instruction: byte)
-      case 0xD8: unimplementedInstruction(instruction: byte)
-      case 0xD9: nop()
-      case 0xDA: jump(condition: conditionBits.carry)
-      case 0xDB: unimplementedInstruction(instruction: byte)
-      case 0xDC: unimplementedInstruction(instruction: byte)
-      case 0xDD: nop()
-      case 0xDE: sub(getNextByte(), borrow: true)
-      case 0xDF: unimplementedInstruction(instruction: byte)
-      case 0xE0: unimplementedInstruction(instruction: byte)
-      case 0xE1: registerPairs.h = pop()
-      case 0xE2: jump(condition: !conditionBits.parity)
-      case 0xE3: exchangeStack()
-      case 0xE4: unimplementedInstruction(instruction: byte)
-      case 0xE5: push(registerPairs.h)
-      case 0xE6: and(getNextByte())
-      case 0xE7: unimplementedInstruction(instruction: byte)
-      case 0xE8: unimplementedInstruction(instruction: byte)
-      case 0xE9: programCounter = Int(joinBytes(registerPairs.h))
-      case 0xEA: jump(condition: conditionBits.parity)
-      case 0xEB: exchange()
-      case 0xEC: unimplementedInstruction(instruction: byte)
-      case 0xED: nop()
-      case 0xEE: xor(getNextByte())
-      case 0xEF: unimplementedInstruction(instruction: byte)
-      case 0xF0: unimplementedInstruction(instruction: byte)
-      case 0xF1: registerPairs.psw = pop()
-      case 0xF2: jump(condition: !conditionBits.sign)
-      case 0xF3: unimplementedInstruction(instruction: byte)
-      case 0xF4: unimplementedInstruction(instruction: byte)
-      case 0xF5: push(registerPairs.psw)
-      case 0xF6: or(getNextByte())
-      case 0xF7: unimplementedInstruction(instruction: byte)
-      case 0xF8: unimplementedInstruction(instruction: byte)
-      case 0xF9: stackPointer = joinBytes(registerPairs.h)
-      case 0xFA: jump(condition: conditionBits.sign)
-      case 0xFB: unimplementedInstruction(instruction: byte)
-      case 0xFC: unimplementedInstruction(instruction: byte)
-      case 0xFD: nop()
-      case 0xFE: sub(getNextByte(), saveResult: false)
-      case 0xFF: unimplementedInstruction(instruction: byte)
-      default: unimplementedInstruction(instruction: byte)
+      switch opcode {
+      // MARK: Carry bit instructions
+      case .CMC: conditionBits.carry = !conditionBits.carry
+      case .STC: conditionBits.carry = true
+
+      // MARK: Single register instructions
+      case .INR_B: increment(&registers.b)
+      case .INR_C: increment(&registers.c)
+      case .INR_D: increment(&registers.d)
+      case .INR_E: increment(&registers.e)
+      case .INR_H: increment(&registers.h)
+      case .INR_L: increment(&registers.l)
+      case .INR_M: increment(&registers.m)
+      case .INR_A: increment(&registers.a)
+
+      case .DCR_B: decrement(&registers.b)
+      case .DCR_C: decrement(&registers.c)
+      case .DCR_D: decrement(&registers.d)
+      case .DCR_E: decrement(&registers.e)
+      case .DCR_H: decrement(&registers.h)
+      case .DCR_L: decrement(&registers.l)
+      case .DCR_M: decrement(&registers.m)
+      case .DCR_A: decrement(&registers.a)
+
+      case .CMA: registers.a ^= 0xFF
+      case .DAA: decimalAdjust()
+
+      // MARK: NOP instruction
+      case .NOP: nop()
+//      case 0x08: nop()
+//      case 0x10: nop()
+//      case 0x18: nop()
+//      case 0x20: nop()
+//      case 0x28: nop()
+//      case 0x30: nop()
+//      case 0x38: nop()
+//      case 0xCB: nop()
+//      case 0xD9: nop()
+//      case 0xDD: nop()
+//      case 0xED: nop()
+//      case 0xFD: nop()
+
+      // MARK: Data transfer instructions
+      case .MOV_B_B: nop()
+      case .MOV_B_C: registers.b = registers.c
+      case .MOV_B_D: registers.b = registers.d
+      case .MOV_B_E: registers.b = registers.e
+      case .MOV_B_H: registers.b = registers.h
+      case .MOV_B_L: registers.b = registers.l
+      case .MOV_B_M: registers.b = registers.m
+      case .MOV_B_A: registers.b = registers.a
+      case .MOV_C_B: registers.c = registers.b
+      case .MOV_C_C: nop()
+      case .MOV_C_D: registers.c = registers.d
+      case .MOV_C_E: registers.c = registers.e
+      case .MOV_C_H: registers.c = registers.h
+      case .MOV_C_L: registers.c = registers.l
+      case .MOV_C_M: registers.c = registers.m
+      case .MOV_C_A: registers.c = registers.a
+      case .MOV_D_B: registers.d = registers.b
+      case .MOV_D_C: registers.d = registers.c
+      case .MOV_D_D: nop()
+      case .MOV_D_E: registers.d = registers.e
+      case .MOV_D_H: registers.d = registers.h
+      case .MOV_D_L: registers.d = registers.l
+      case .MOV_D_M: registers.d = registers.m
+      case .MOV_D_A: registers.d = registers.a
+      case .MOV_E_B: registers.e = registers.b
+      case .MOV_E_C: registers.e = registers.c
+      case .MOV_E_D: registers.e = registers.d
+      case .MOV_E_E: nop()
+      case .MOV_E_H: registers.e = registers.h
+      case .MOV_E_L: registers.e = registers.l
+      case .MOV_E_M: registers.e = registers.m
+      case .MOV_E_A: registers.e = registers.a
+      case .MOV_H_B: registers.h = registers.b
+      case .MOV_H_C: registers.h = registers.c
+      case .MOV_H_D: registers.h = registers.d
+      case .MOV_H_E: registers.h = registers.e
+      case .MOV_H_H: nop()
+      case .MOV_H_L: registers.h = registers.l
+      case .MOV_H_M: registers.h = registers.m
+      case .MOV_H_A: registers.h = registers.a
+      case .MOV_L_B: registers.l = registers.b
+      case .MOV_L_C: registers.l = registers.c
+      case .MOV_L_D: registers.l = registers.d
+      case .MOV_L_E: registers.l = registers.e
+      case .MOV_L_H: registers.l = registers.h
+      case .MOV_L_L: nop()
+      case .MOV_L_M: registers.l = registers.m
+      case .MOV_L_A: registers.l = registers.a
+      case .MOV_M_B: registers.m = registers.b
+      case .MOV_M_C: registers.m = registers.c
+      case .MOV_M_D: registers.m = registers.d
+      case .MOV_M_E: registers.m = registers.e
+      case .MOV_M_H: registers.m = registers.h
+      case .MOV_M_L: registers.m = registers.l
+      case .MOV_M_A: registers.m = registers.a
+      case .MOV_A_B: registers.a = registers.b
+      case .MOV_A_C: registers.a = registers.c
+      case .MOV_A_D: registers.a = registers.d
+      case .MOV_A_E: registers.a = registers.e
+      case .MOV_A_H: registers.a = registers.h
+      case .MOV_A_L: registers.a = registers.l
+      case .MOV_A_M: registers.a = registers.m
+      case .MOV_A_A: nop()
+
+      case .STAX_B: memory[Int(joinBytes(registerPairs.b))] = registers.a
+      case .STAX_D: memory[Int(joinBytes(registerPairs.d))] = registers.a
+      case .LDAX_B: registers.a = memory[Int(joinBytes(registerPairs.b))]
+      case .LDAX_D: registers.a = memory[Int(joinBytes(registerPairs.d))]
+
+      // MARK: Register or memory to accumulator instructions
+      case .ADD_B: add(registers.b)
+      case .ADD_C: add(registers.c)
+      case .ADD_D: add(registers.d)
+      case .ADD_E: add(registers.e)
+      case .ADD_H: add(registers.h)
+      case .ADD_L: add(registers.l)
+      case .ADD_M: add(registers.m)
+      case .ADD_A: add(registers.a)
+
+      case .ADC_B: add(registers.b, carry: true)
+      case .ADC_C: add(registers.c, carry: true)
+      case .ADC_D: add(registers.d, carry: true)
+      case .ADC_E: add(registers.e, carry: true)
+      case .ADC_H: add(registers.h, carry: true)
+      case .ADC_L: add(registers.l, carry: true)
+      case .ADC_M: add(registers.m, carry: true)
+      case .ADC_A: add(registers.a, carry: true)
+
+      case .SUB_B: sub(registers.b)
+      case .SUB_C: sub(registers.c)
+      case .SUB_D: sub(registers.d)
+      case .SUB_E: sub(registers.e)
+      case .SUB_H: sub(registers.h)
+      case .SUB_L: sub(registers.l)
+      case .SUB_M: sub(registers.m)
+      case .SUB_A: sub(registers.a)
+
+      case .SBB_B: sub(registers.b, borrow: true)
+      case .SBB_C: sub(registers.c, borrow: true)
+      case .SBB_D: sub(registers.d, borrow: true)
+      case .SBB_E: sub(registers.e, borrow: true)
+      case .SBB_H: sub(registers.h, borrow: true)
+      case .SBB_L: sub(registers.l, borrow: true)
+      case .SBB_M: sub(registers.m, borrow: true)
+      case .SBB_A: sub(registers.a, borrow: true)
+
+      case .ANA_B: and(registers.b)
+      case .ANA_C: and(registers.c)
+      case .ANA_D: and(registers.d)
+      case .ANA_E: and(registers.e)
+      case .ANA_H: and(registers.h)
+      case .ANA_L: and(registers.l)
+      case .ANA_M: and(registers.m)
+      case .ANA_A: and(registers.a)
+
+      case .XRA_B: xor(registers.b)
+      case .XRA_C: xor(registers.c)
+      case .XRA_D: xor(registers.d)
+      case .XRA_E: xor(registers.e)
+      case .XRA_H: xor(registers.h)
+      case .XRA_L: xor(registers.l)
+      case .XRA_M: xor(registers.m)
+      case .XRA_A: xor(registers.a)
+
+      case .ORA_B: or(registers.b)
+      case .ORA_C: or(registers.c)
+      case .ORA_D: or(registers.d)
+      case .ORA_E: or(registers.e)
+      case .ORA_H: or(registers.h)
+      case .ORA_L: or(registers.l)
+      case .ORA_M: or(registers.m)
+      case .ORA_A: or(registers.a)
+
+      case .CMP_B: sub(registers.b, saveResult: false)
+      case .CMP_C: sub(registers.c, saveResult: false)
+      case .CMP_D: sub(registers.d, saveResult: false)
+      case .CMP_E: sub(registers.e, saveResult: false)
+      case .CMP_H: sub(registers.h, saveResult: false)
+      case .CMP_L: sub(registers.l, saveResult: false)
+      case .CMP_M: sub(registers.m, saveResult: false)
+      case .CMP_A: sub(registers.a, saveResult: false)
+
+      // MARK: Rotate accumulator instructions
+      case .RLC: rotate(.left)
+      case .RRC: rotate(.right)
+      case .RAL: rotate(.left,  carry: true)
+      case .RAR: rotate(.right, carry: true)
+
+      // MARK: Register pair instructions
+      case .PUSH_B:   push(registerPairs.b)
+      case .PUSH_D:   push(registerPairs.d)
+      case .PUSH_H:   push(registerPairs.h)
+      case .PUSH_PSW: push(registerPairs.psw)
+
+      case .POP_B:   registerPairs.b   = pop()
+      case .POP_D:   registerPairs.d   = pop()
+      case .POP_H:   registerPairs.h   = pop()
+      case .POP_PSW: registerPairs.psw = pop()
+
+      case .DAD_B:  add(joinBytes(registerPairs.b))
+      case .DAD_D:  add(joinBytes(registerPairs.d))
+      case .DAD_H:  add(joinBytes(registerPairs.h))
+      case .DAD_SP: add(stackPointer)
+
+      case .INX_B:  increment(&registerPairs.b)
+      case .INX_D:  increment(&registerPairs.d)
+      case .INX_H:  increment(&registerPairs.h)
+      case .INX_SP: stackPointer = stackPointer &+ 1
+
+      case .DCX_B:  decrement(&registerPairs.b)
+      case .DCX_D:  decrement(&registerPairs.d)
+      case .DCX_H:  decrement(&registerPairs.h)
+      case .DCX_SP: stackPointer = stackPointer &- 1
+
+      case .XCHG: exchange()
+      case .XTHL: exchangeStack()
+      case .SPHL: stackPointer = joinBytes(registerPairs.h)
+
+      // MARK: Immediate instructions
+      case .LXI_B:  registerPairs.b = getNextTwoBytes()
+      case .LXI_D:  registerPairs.d = getNextTwoBytes()
+      case .LXI_H:  registerPairs.h = getNextTwoBytes()
+      case .LXI_SP: stackPointer = joinBytes(getNextTwoBytes())
+
+      case .MVI_B: registers.b = getNextByte()
+      case .MVI_C: registers.c = getNextByte()
+      case .MVI_D: registers.d = getNextByte()
+      case .MVI_E: registers.e = getNextByte()
+      case .MVI_H: registers.h = getNextByte()
+      case .MVI_L: registers.l = getNextByte()
+      case .MVI_M: registers.m = getNextByte()
+      case .MVI_A: registers.a = getNextByte()
+
+      case .ADI: add(getNextByte())
+      case .ACI: add(getNextByte(), carry: true)
+      case .SUI: sub(getNextByte())
+      case .SBI: sub(getNextByte(), borrow: true)
+      case .ANI: and(getNextByte())
+      case .XRI: xor(getNextByte())
+      case .ORI:  or(getNextByte())
+      case .CPI: sub(getNextByte(), saveResult: false)
+
+      // MARK: Direct addressing instructions
+      case .STA: memory[Int(joinBytes(getNextTwoBytes()))] = registers.a
+      case .LDA: registers.a = memory[Int(joinBytes(getNextTwoBytes()))]
+
+      case .SHLD: store(joinBytes(getNextTwoBytes()))
+      case .LHLD: load(joinBytes(getNextTwoBytes()))
+
+      // MARK: Jump instructions
+      case .PCHL: programCounter = Int(joinBytes(registerPairs.h))
+
+      case .JMP: jump()
+      case .JC:  jump(condition:  conditionBits.carry)
+      case .JNC: jump(condition: !conditionBits.carry)
+      case .JZ:  jump(condition:  conditionBits.zero)
+      case .JNZ: jump(condition: !conditionBits.zero)
+      case .JM:  jump(condition:  conditionBits.sign)
+      case .JP:  jump(condition: !conditionBits.sign)
+      case .JPE: jump(condition:  conditionBits.parity)
+      case .JPO: jump(condition: !conditionBits.parity)
+
+      // MARK: Call subroutine instructions
+      case .CALL: unimplementedInstruction(instruction: opcode)
+      case .CC:   unimplementedInstruction(instruction: opcode)
+      case .CNC:  unimplementedInstruction(instruction: opcode)
+      case .CZ:   unimplementedInstruction(instruction: opcode)
+      case .CNZ:  unimplementedInstruction(instruction: opcode)
+      case .CM:   unimplementedInstruction(instruction: opcode)
+      case .CP:   unimplementedInstruction(instruction: opcode)
+      case .CPE:  unimplementedInstruction(instruction: opcode)
+      case .CPO:  unimplementedInstruction(instruction: opcode)
+
+      // MARK: Return from subroutine instructions
+      case .RET: unimplementedInstruction(instruction: opcode)
+      case .RC:  unimplementedInstruction(instruction: opcode)
+      case .RNC: unimplementedInstruction(instruction: opcode)
+      case .RZ:  unimplementedInstruction(instruction: opcode)
+      case .RNZ: unimplementedInstruction(instruction: opcode)
+      case .RM:  unimplementedInstruction(instruction: opcode)
+      case .RP:  unimplementedInstruction(instruction: opcode)
+      case .RPE: unimplementedInstruction(instruction: opcode)
+      case .RPO: unimplementedInstruction(instruction: opcode)
+
+      // MARK: RST instruction
+      case .RST_0: unimplementedInstruction(instruction: opcode)
+      case .RST_1: unimplementedInstruction(instruction: opcode)
+      case .RST_2: unimplementedInstruction(instruction: opcode)
+      case .RST_3: unimplementedInstruction(instruction: opcode)
+      case .RST_4: unimplementedInstruction(instruction: opcode)
+      case .RST_5: unimplementedInstruction(instruction: opcode)
+      case .RST_6: unimplementedInstruction(instruction: opcode)
+      case .RST_7: unimplementedInstruction(instruction: opcode)
+
+      // MARK: Interrupt flip-flop instructions
+      case .EI: unimplementedInstruction(instruction: opcode)
+      case .DI: unimplementedInstruction(instruction: opcode)
+
+      // MARK: Input/output instructions
+      case .IN:  unimplementedInstruction(instruction: opcode)
+      case .OUT: unimplementedInstruction(instruction: opcode)
+
+      // MARK: Halt instruction
+      case .HLT: unimplementedInstruction(instruction: opcode)
       }
     }
   }

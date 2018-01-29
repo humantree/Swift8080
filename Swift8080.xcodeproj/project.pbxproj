@@ -15,6 +15,7 @@
 		742244E21FF235DE00B7C970 /* CPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244CF1FF22D3400B7C970 /* CPU.swift */; };
 		742244E31FF235DE00B7C970 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244C51FEE222900B7C970 /* main.swift */; };
 		74EF60DA201F10DB00FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
+		74EF60DB201F2DA300FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -198,6 +199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74EF60DB201F2DA300FA0D79 /* Opcode.swift in Sources */,
 				742244E11FF235DE00B7C970 /* CPUState.swift in Sources */,
 				742244E01FF2325700B7C970 /* CPUTests.swift in Sources */,
 				742244E31FF235DE00B7C970 /* main.swift in Sources */,
