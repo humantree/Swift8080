@@ -447,9 +447,10 @@ class CPUTests: XCTestCase {
   }
 
   func testPOP2() {
-    addToMemory([0xF1])
     memory[0x2C00] = 0xC3
     memory[0x2C01] = 0xFF
+    memory[0x2CFF] = 0xF1
+    programCounter = 0x2CFF
     stackPointer = 0x2C00
 
     cpu.start()
