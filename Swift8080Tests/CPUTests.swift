@@ -318,6 +318,226 @@ class CPUTests: XCTestCase {
     XCTAssertEqual(stackPointer, 0x0000)
   }
 
+  func testJC1() {
+    addToMemory([0xDA, 0x00, 0x60])
+    conditionBits.carry = true
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x00)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJC2() {
+    addToMemory([0xDA, 0x00, 0x60])
+    conditionBits.carry = false
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x34)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJM1() {
+    addToMemory([0xFA, 0x00, 0x60])
+    conditionBits.sign = true
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x00)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJM2() {
+    addToMemory([0xFA, 0x00, 0x60])
+    conditionBits.sign = false
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x34)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJMP() {
+    addToMemory([0xC3, 0x00, 0x60])
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x00)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJNC1() {
+    addToMemory([0xD2, 0x00, 0x60])
+    conditionBits.carry = false
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x00)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJNC2() {
+    addToMemory([0xD2, 0x00, 0x60])
+    conditionBits.carry = true
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x34)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJNZ1() {
+    addToMemory([0xC2, 0x00, 0x60])
+    conditionBits.zero = false
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x00)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJNZ2() {
+    addToMemory([0xC2, 0x00, 0x60])
+    conditionBits.zero = true
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x34)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJP1() {
+    addToMemory([0xF2, 0x00, 0x60])
+    conditionBits.sign = false
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x00)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJP2() {
+    addToMemory([0xF2, 0x00, 0x60])
+    conditionBits.sign = true
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x34)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJPE1() {
+    addToMemory([0xEA, 0x00, 0x60])
+    conditionBits.parity = true
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x00)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJPE2() {
+    addToMemory([0xEA, 0x00, 0x60])
+    conditionBits.parity = false
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x34)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJPO1() {
+    addToMemory([0xE2, 0x00, 0x60])
+    conditionBits.parity = false
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x00)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJPO2() {
+    addToMemory([0xE2, 0x00, 0x60])
+    conditionBits.parity = true
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x34)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJZ1() {
+    addToMemory([0xCA, 0x00, 0x60])
+    conditionBits.zero = true
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x00)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
+  func testJZ2() {
+    addToMemory([0xCA, 0x00, 0x60])
+    conditionBits.zero = false
+    registers.a = 0x34
+    memory[0x5FFF] = 0x47
+    memory[0x6000] = 0x4F
+
+    cpu.start()
+
+    XCTAssertEqual(registers.b, 0x34)
+    XCTAssertEqual(registers.c, 0x34)
+  }
+
   func testLDA() {
     addToMemory([0x3A, 0x00, 0x03])
     memory[0x0300] = 0x47

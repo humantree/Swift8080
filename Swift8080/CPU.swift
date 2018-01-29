@@ -121,6 +121,11 @@ class CPU {
     operand = splitBytes(joinBytes(operand) &+ 1)
   }
 
+  private func jump(condition: Bool = true) {
+    let address = joinBytes(getNextTwoBytes())
+    if condition { programCounter = Int(address) }
+  }
+
   private func load(_ address: UInt16) {
     registers.l = memory[Int(address)]
     registers.h = memory[Int(address + 1)]
@@ -411,15 +416,15 @@ class CPU {
       case 0xBF: sub(registers.a, saveResult: false)
       case 0xC0: unimplementedInstruction(instruction: byte)
       case 0xC1: registerPairs.b = pop()
-      case 0xC2: unimplementedInstruction(instruction: byte)
-      case 0xC3: unimplementedInstruction(instruction: byte)
+      case 0xC2: jump(condition: !conditionBits.zero)
+      case 0xC3: jump()
       case 0xC4: unimplementedInstruction(instruction: byte)
       case 0xC5: push(registerPairs.b)
       case 0xC6: add(getNextByte())
       case 0xC7: unimplementedInstruction(instruction: byte)
       case 0xC8: unimplementedInstruction(instruction: byte)
       case 0xC9: unimplementedInstruction(instruction: byte)
-      case 0xCA: unimplementedInstruction(instruction: byte)
+      case 0xCA: jump(condition: conditionBits.zero)
       case 0xCB: nop()
       case 0xCC: unimplementedInstruction(instruction: byte)
       case 0xCD: unimplementedInstruction(instruction: byte)
@@ -427,7 +432,7 @@ class CPU {
       case 0xCF: unimplementedInstruction(instruction: byte)
       case 0xD0: unimplementedInstruction(instruction: byte)
       case 0xD1: registerPairs.d = pop()
-      case 0xD2: unimplementedInstruction(instruction: byte)
+      case 0xD2: jump(condition: !conditionBits.carry)
       case 0xD3: unimplementedInstruction(instruction: byte)
       case 0xD4: unimplementedInstruction(instruction: byte)
       case 0xD5: push(registerPairs.d)
@@ -435,7 +440,7 @@ class CPU {
       case 0xD7: unimplementedInstruction(instruction: byte)
       case 0xD8: unimplementedInstruction(instruction: byte)
       case 0xD9: nop()
-      case 0xDA: unimplementedInstruction(instruction: byte)
+      case 0xDA: jump(condition: conditionBits.carry)
       case 0xDB: unimplementedInstruction(instruction: byte)
       case 0xDC: unimplementedInstruction(instruction: byte)
       case 0xDD: nop()
@@ -443,7 +448,7 @@ class CPU {
       case 0xDF: unimplementedInstruction(instruction: byte)
       case 0xE0: unimplementedInstruction(instruction: byte)
       case 0xE1: registerPairs.h = pop()
-      case 0xE2: unimplementedInstruction(instruction: byte)
+      case 0xE2: jump(condition: !conditionBits.parity)
       case 0xE3: exchangeStack()
       case 0xE4: unimplementedInstruction(instruction: byte)
       case 0xE5: push(registerPairs.h)
@@ -451,7 +456,7 @@ class CPU {
       case 0xE7: unimplementedInstruction(instruction: byte)
       case 0xE8: unimplementedInstruction(instruction: byte)
       case 0xE9: programCounter = Int(joinBytes(registerPairs.h))
-      case 0xEA: unimplementedInstruction(instruction: byte)
+      case 0xEA: jump(condition: conditionBits.parity)
       case 0xEB: exchange()
       case 0xEC: unimplementedInstruction(instruction: byte)
       case 0xED: nop()
@@ -459,7 +464,7 @@ class CPU {
       case 0xEF: unimplementedInstruction(instruction: byte)
       case 0xF0: unimplementedInstruction(instruction: byte)
       case 0xF1: registerPairs.psw = pop()
-      case 0xF2: unimplementedInstruction(instruction: byte)
+      case 0xF2: jump(condition: !conditionBits.sign)
       case 0xF3: unimplementedInstruction(instruction: byte)
       case 0xF4: unimplementedInstruction(instruction: byte)
       case 0xF5: push(registerPairs.psw)
@@ -467,7 +472,7 @@ class CPU {
       case 0xF7: unimplementedInstruction(instruction: byte)
       case 0xF8: unimplementedInstruction(instruction: byte)
       case 0xF9: stackPointer = joinBytes(registerPairs.h)
-      case 0xFA: unimplementedInstruction(instruction: byte)
+      case 0xFA: jump(condition: conditionBits.sign)
       case 0xFB: unimplementedInstruction(instruction: byte)
       case 0xFC: unimplementedInstruction(instruction: byte)
       case 0xFD: nop()
