@@ -14,6 +14,7 @@
 		742244E11FF235DE00B7C970 /* CPUState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244CD1FEF19CC00B7C970 /* CPUState.swift */; };
 		742244E21FF235DE00B7C970 /* CPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244CF1FF22D3400B7C970 /* CPU.swift */; };
 		742244E31FF235DE00B7C970 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244C51FEE222900B7C970 /* main.swift */; };
+		74EF60DA201F10DB00FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,7 @@
 		742244D71FF231BD00B7C970 /* Swift8080Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Swift8080Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		742244DB1FF231BD00B7C970 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		742244DF1FF2325700B7C970 /* CPUTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUTests.swift; sourceTree = "<group>"; };
+		74EF60D9201F10DB00FA0D79 /* Opcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opcode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 				742244CD1FEF19CC00B7C970 /* CPUState.swift */,
 				742244CF1FF22D3400B7C970 /* CPU.swift */,
 				742244C51FEE222900B7C970 /* main.swift */,
+				74EF60D9201F10DB00FA0D79 /* Opcode.swift */,
 			);
 			path = Swift8080;
 			sourceTree = "<group>";
@@ -185,6 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				742244CE1FEF19CC00B7C970 /* CPUState.swift in Sources */,
+				74EF60DA201F10DB00FA0D79 /* Opcode.swift in Sources */,
 				742244C61FEE222900B7C970 /* main.swift in Sources */,
 				742244D01FF22D3400B7C970 /* CPU.swift in Sources */,
 			);
