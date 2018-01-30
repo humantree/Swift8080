@@ -16,7 +16,7 @@ class CPUTests: XCTestCase {
     super.setUp()
 
     conditionBits = ConditionBits()
-    memory = Data.init(repeating: 0x00, count: 0xFFFF)
+    memory = Data.init(repeating: Opcode.NOP.rawValue, count: 0xFFFF)
     programCounter = Int()
     registers = Registers()
     stackPointer = UInt16()
@@ -29,9 +29,9 @@ class CPUTests: XCTestCase {
 
   func testACI() {
     addToMemory([
-      0x3E, 0x56,
-      0xCE, 0xBE,
-      0xCE, 0x42])
+      Opcode.MVI_A.rawValue, 0x56,
+      Opcode.ACI.rawValue,   0xBE,
+      Opcode.ACI.rawValue,   0x42])
 
     cpu.start()
 
@@ -44,7 +44,7 @@ class CPUTests: XCTestCase {
   }
 
   func testADC1() {
-    addToMemory([0x89])
+    addToMemory([Opcode.ADC_C.rawValue])
     registers.c = 0x3D
     registers.a = 0x42
 
@@ -59,7 +59,7 @@ class CPUTests: XCTestCase {
   }
 
   func testADC2() {
-    addToMemory([0x89])
+    addToMemory([Opcode.ADC_C.rawValue])
     registers.c = 0x3D
     registers.a = 0x42
     conditionBits.carry = true
@@ -75,7 +75,7 @@ class CPUTests: XCTestCase {
   }
 
   func testADD1() {
-    addToMemory([0x87])
+    addToMemory([Opcode.ADD_A.rawValue])
     registers.a = 0x0F
 
     cpu.start()
@@ -89,7 +89,7 @@ class CPUTests: XCTestCase {
   }
 
   func testADD2() {
-    addToMemory([0x82])
+    addToMemory([Opcode.ADD_D.rawValue])
     registers.d = 0x2E
     registers.a = 0x6C
 
@@ -105,9 +105,9 @@ class CPUTests: XCTestCase {
 
   func testADI() {
     addToMemory([
-      0x3E, 0x14,
-      0xC6, 0x42,
-      0xC6, 0xBE])
+      Opcode.MVI_A.rawValue, 0x14,
+      Opcode.ADI.rawValue,   0x42,
+      Opcode.ADI.rawValue,   0xBE])
 
     cpu.start()
 
@@ -120,7 +120,7 @@ class CPUTests: XCTestCase {
   }
 
   func testANA() {
-    addToMemory([0xA1])
+    addToMemory([Opcode.ANA_C.rawValue])
     registers.a = 0xFC
     registers.c = 0x0F
 
@@ -134,7 +134,7 @@ class CPUTests: XCTestCase {
   }
 
   func testANI() {
-    addToMemory([0xE6, 0x0F])
+    addToMemory([Opcode.ANI.rawValue, 0x0F])
     registers.a = 0x3A
 
     cpu.start()
@@ -147,7 +147,7 @@ class CPUTests: XCTestCase {
   }
 
   func testCMA() {
-    addToMemory([0x2F])
+    addToMemory([Opcode.CMA.rawValue])
     registers.a = 0x51
 
     cpu.start()
@@ -156,7 +156,7 @@ class CPUTests: XCTestCase {
   }
 
   func testCMC() {
-    addToMemory([0x3F])
+    addToMemory([Opcode.CMC.rawValue])
     conditionBits.carry = true
 
     cpu.start()
@@ -165,7 +165,7 @@ class CPUTests: XCTestCase {
   }
 
   func testCMP1() {
-    addToMemory([0xBB])
+    addToMemory([Opcode.CMP_E.rawValue])
     registers.a = 0x0A
     registers.e = 0x05
 
@@ -179,7 +179,7 @@ class CPUTests: XCTestCase {
   }
 
   func testCMP2() {
-    addToMemory([0xBB])
+    addToMemory([Opcode.CMP_E.rawValue])
     registers.a = 0x02
     registers.e = 0x05
 
@@ -193,7 +193,7 @@ class CPUTests: XCTestCase {
   }
 
   func testCMP3() {
-    addToMemory([0xBB])
+    addToMemory([Opcode.CMP_E.rawValue])
     registers.a = 0xE5
     registers.e = 0x05
 
@@ -207,7 +207,7 @@ class CPUTests: XCTestCase {
   }
 
   func testCPI() {
-    addToMemory([0xFE, 0x40])
+    addToMemory([Opcode.CPI.rawValue, 0x40])
     registers.a = 0x4A
 
     cpu.start()
@@ -220,7 +220,7 @@ class CPUTests: XCTestCase {
   }
 
   func testDAA() {
-    addToMemory([0x27])
+    addToMemory([Opcode.DAA.rawValue])
     registers.a = 0x9B
 
     cpu.start()
@@ -234,7 +234,7 @@ class CPUTests: XCTestCase {
   }
 
   func testDAD1() {
-    addToMemory([0x09])
+    addToMemory([Opcode.DAD_B.rawValue])
     registers.b = 0x33
     registers.c = 0x9F
     registers.h = 0xA1
@@ -248,7 +248,7 @@ class CPUTests: XCTestCase {
   }
 
   func testDAD2() {
-    addToMemory([0x29])
+    addToMemory([Opcode.DAD_H.rawValue])
     registers.h = 0xFF
     registers.l = 0xFF
 
@@ -260,7 +260,7 @@ class CPUTests: XCTestCase {
   }
 
   func testDCR() {
-    addToMemory([0x35])
+    addToMemory([Opcode.DCR_M.rawValue])
     registers.h = 0x3A
     registers.l = 0x7C
     memory[0x3A7C] = 0x40
@@ -275,7 +275,7 @@ class CPUTests: XCTestCase {
   }
 
   func testDCX() {
-    addToMemory([0x2B])
+    addToMemory([Opcode.DCX_H.rawValue])
     registers.h = 0x98
     registers.l = 0x00
 
@@ -286,7 +286,7 @@ class CPUTests: XCTestCase {
   }
 
   func testINR() {
-    addToMemory([0x0C])
+    addToMemory([Opcode.INR_C.rawValue])
     registers.c = 0x99
 
     cpu.start()
@@ -299,7 +299,7 @@ class CPUTests: XCTestCase {
   }
 
   func testINX1() {
-    addToMemory([0x13])
+    addToMemory([Opcode.INX_D.rawValue])
     registers.d = 0x38
     registers.e = 0xFF
 
@@ -310,7 +310,7 @@ class CPUTests: XCTestCase {
   }
 
   func testINX2() {
-    addToMemory([0x33])
+    addToMemory([Opcode.INX_SP.rawValue])
     stackPointer = 0xFFFF
 
     cpu.start()
@@ -319,11 +319,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJC1() {
-    addToMemory([0xDA, 0x00, 0x60])
+    addToMemory([Opcode.JC.rawValue, 0x00, 0x60])
     conditionBits.carry = true
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -332,11 +332,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJC2() {
-    addToMemory([0xDA, 0x00, 0x60])
+    addToMemory([Opcode.JC.rawValue, 0x00, 0x60])
     conditionBits.carry = false
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -345,11 +345,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJM1() {
-    addToMemory([0xFA, 0x00, 0x60])
+    addToMemory([Opcode.JM.rawValue, 0x00, 0x60])
     conditionBits.sign = true
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -358,11 +358,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJM2() {
-    addToMemory([0xFA, 0x00, 0x60])
+    addToMemory([Opcode.JM.rawValue, 0x00, 0x60])
     conditionBits.sign = false
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -371,10 +371,10 @@ class CPUTests: XCTestCase {
   }
 
   func testJMP() {
-    addToMemory([0xC3, 0x00, 0x60])
+    addToMemory([Opcode.JMP.rawValue, 0x00, 0x60])
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -383,11 +383,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJNC1() {
-    addToMemory([0xD2, 0x00, 0x60])
+    addToMemory([Opcode.JNC.rawValue, 0x00, 0x60])
     conditionBits.carry = false
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -396,11 +396,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJNC2() {
-    addToMemory([0xD2, 0x00, 0x60])
+    addToMemory([Opcode.JNC.rawValue, 0x00, 0x60])
     conditionBits.carry = true
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -409,11 +409,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJNZ1() {
-    addToMemory([0xC2, 0x00, 0x60])
+    addToMemory([Opcode.JNZ.rawValue, 0x00, 0x60])
     conditionBits.zero = false
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -422,11 +422,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJNZ2() {
-    addToMemory([0xC2, 0x00, 0x60])
+    addToMemory([Opcode.JNZ.rawValue, 0x00, 0x60])
     conditionBits.zero = true
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -435,11 +435,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJP1() {
-    addToMemory([0xF2, 0x00, 0x60])
+    addToMemory([Opcode.JP.rawValue, 0x00, 0x60])
     conditionBits.sign = false
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -448,11 +448,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJP2() {
-    addToMemory([0xF2, 0x00, 0x60])
+    addToMemory([Opcode.JP.rawValue, 0x00, 0x60])
     conditionBits.sign = true
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -461,11 +461,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJPE1() {
-    addToMemory([0xEA, 0x00, 0x60])
+    addToMemory([Opcode.JPE.rawValue, 0x00, 0x60])
     conditionBits.parity = true
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -474,11 +474,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJPE2() {
-    addToMemory([0xEA, 0x00, 0x60])
+    addToMemory([Opcode.JPE.rawValue, 0x00, 0x60])
     conditionBits.parity = false
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -487,11 +487,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJPO1() {
-    addToMemory([0xE2, 0x00, 0x60])
+    addToMemory([Opcode.JPO.rawValue, 0x00, 0x60])
     conditionBits.parity = false
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -500,11 +500,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJPO2() {
-    addToMemory([0xE2, 0x00, 0x60])
+    addToMemory([Opcode.JPO.rawValue, 0x00, 0x60])
     conditionBits.parity = true
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -513,11 +513,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJZ1() {
-    addToMemory([0xCA, 0x00, 0x60])
+    addToMemory([Opcode.JZ.rawValue, 0x00, 0x60])
     conditionBits.zero = true
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -526,11 +526,11 @@ class CPUTests: XCTestCase {
   }
 
   func testJZ2() {
-    addToMemory([0xCA, 0x00, 0x60])
+    addToMemory([Opcode.JZ.rawValue, 0x00, 0x60])
     conditionBits.zero = false
     registers.a = 0x34
-    memory[0x5FFF] = 0x47
-    memory[0x6000] = 0x4F
+    memory[0x5FFF] = Opcode.MOV_B_A.rawValue
+    memory[0x6000] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -539,7 +539,7 @@ class CPUTests: XCTestCase {
   }
 
   func testLDA() {
-    addToMemory([0x3A, 0x00, 0x03])
+    addToMemory([Opcode.LDA.rawValue, 0x00, 0x03])
     memory[0x0300] = 0x47
 
     cpu.start()
@@ -548,7 +548,7 @@ class CPUTests: XCTestCase {
   }
 
   func testLDAX() {
-    addToMemory([0x1A])
+    addToMemory([Opcode.LDAX_D.rawValue])
     memory[0x938B] = 0x2D
     registers.d = 0x93
     registers.e = 0x8B
@@ -559,7 +559,7 @@ class CPUTests: XCTestCase {
   }
 
   func testLHLD() {
-    addToMemory([0x2A, 0x5B, 0x02])
+    addToMemory([Opcode.LHLD.rawValue, 0x5B, 0x02])
     memory[0x025B] = 0xFF
     memory[0x025C] = 0x03
 
@@ -570,7 +570,7 @@ class CPUTests: XCTestCase {
   }
 
   func testLXI1() {
-    addToMemory([0x21, 0x03, 0x01])
+    addToMemory([Opcode.LXI_H.rawValue, 0x03, 0x01])
 
     cpu.start()
 
@@ -579,7 +579,7 @@ class CPUTests: XCTestCase {
   }
 
   func testLXI2() {
-    addToMemory([0x31, 0xBC, 0x3A])
+    addToMemory([Opcode.LXI_SP.rawValue, 0xBC, 0x3A])
 
     cpu.start()
 
@@ -587,7 +587,7 @@ class CPUTests: XCTestCase {
   }
 
   func testMOV() {
-    addToMemory([0x77])
+    addToMemory([Opcode.MOV_M_A.rawValue])
     registers.h = 0x2B
     registers.l = 0xE9
     registers.a = 0xEE
@@ -599,9 +599,9 @@ class CPUTests: XCTestCase {
 
   func testMVI() {
     addToMemory([
-      0x26, 0x3C,
-      0x2E, 0xF4,
-      0x36, 0xFF])
+      Opcode.MVI_H.rawValue, 0x3C,
+      Opcode.MVI_L.rawValue, 0xF4,
+      Opcode.MVI_M.rawValue, 0xFF])
 
     cpu.start()
 
@@ -613,7 +613,7 @@ class CPUTests: XCTestCase {
   }
 
   func testORA() {
-    addToMemory([0xB1])
+    addToMemory([Opcode.ORA_C.rawValue])
     registers.c = 0x0F
     registers.a = 0x33
 
@@ -627,7 +627,7 @@ class CPUTests: XCTestCase {
   }
 
   func testORI() {
-    addToMemory([0xF6, 0x0F])
+    addToMemory([Opcode.ORI.rawValue, 0x0F])
     registers.a = 0xB5
 
     cpu.start()
@@ -640,12 +640,12 @@ class CPUTests: XCTestCase {
   }
 
   func testPCHL() {
-    addToMemory([0xE9])
+    addToMemory([Opcode.PCHL.rawValue])
     registers.a = 0x34
     registers.h = 0x41
     registers.l = 0x3E
-    memory[0x413D] = 0x47
-    memory[0x413E] = 0x4F
+    memory[0x413D] = Opcode.MOV_B_A.rawValue
+    memory[0x413E] = Opcode.MOV_C_A.rawValue
 
     cpu.start()
 
@@ -654,7 +654,7 @@ class CPUTests: XCTestCase {
   }
 
   func testPOP1() {
-    addToMemory([0xE1])
+    addToMemory([Opcode.POP_H.rawValue])
     memory[0x1239] = 0x3D
     memory[0x123A] = 0x93
     stackPointer = 0x1239
@@ -669,7 +669,7 @@ class CPUTests: XCTestCase {
   func testPOP2() {
     memory[0x2C00] = 0xC3
     memory[0x2C01] = 0xFF
-    memory[0x2CFF] = 0xF1
+    memory[0x2CFF] = Opcode.POP_PSW.rawValue
     programCounter = 0x2CFF
     stackPointer = 0x2C00
 
@@ -685,7 +685,7 @@ class CPUTests: XCTestCase {
   }
 
   func testPUSH1() {
-    addToMemory([0xD5])
+    addToMemory([Opcode.PUSH_D.rawValue])
     registers.d = 0x8F
     registers.e = 0x9D
     stackPointer = 0x3A2C
@@ -698,7 +698,7 @@ class CPUTests: XCTestCase {
   }
 
   func testPUSH2() {
-    addToMemory([0xF5])
+    addToMemory([Opcode.PUSH_PSW.rawValue])
     registers.a = 0x1F
     stackPointer = 0x502A
     conditionBits.carry = true
@@ -713,7 +713,7 @@ class CPUTests: XCTestCase {
   }
 
   func testRAL() {
-    addToMemory([0x17])
+    addToMemory([Opcode.RAL.rawValue])
     registers.a = 0xB5
 
     cpu.start()
@@ -723,7 +723,7 @@ class CPUTests: XCTestCase {
   }
 
   func testRAR() {
-    addToMemory([0x1F])
+    addToMemory([Opcode.RAR.rawValue])
     registers.a = 0x6A
     conditionBits.carry = true
 
@@ -734,7 +734,7 @@ class CPUTests: XCTestCase {
   }
   
   func testRLC() {
-    addToMemory([0x07])
+    addToMemory([Opcode.RLC.rawValue])
     registers.a = 0xF2
 
     cpu.start()
@@ -744,7 +744,7 @@ class CPUTests: XCTestCase {
   }
 
   func testRRC() {
-    addToMemory([0x0F])
+    addToMemory([Opcode.RRC.rawValue])
     registers.a = 0xF2
 
     cpu.start()
@@ -754,7 +754,7 @@ class CPUTests: XCTestCase {
   }
 
   func testSBB() {
-    addToMemory([0x9D])
+    addToMemory([Opcode.SBB_L.rawValue])
     registers.l = 0x02
     registers.a = 0x04
     conditionBits.carry = true
@@ -770,7 +770,7 @@ class CPUTests: XCTestCase {
   }
 
   func testSBI() {
-    addToMemory([0xDE, 0x01])
+    addToMemory([Opcode.SBI.rawValue, 0x01])
     conditionBits.carry = true
 
     cpu.start()
@@ -784,7 +784,7 @@ class CPUTests: XCTestCase {
   }
 
   func testSHLD() {
-    addToMemory([0x22, 0x0A, 0x01])
+    addToMemory([Opcode.SHLD.rawValue, 0x0A, 0x01])
     registers.h = 0xAE
     registers.l = 0x29
 
@@ -795,7 +795,7 @@ class CPUTests: XCTestCase {
   }
 
   func testSPHL() {
-    addToMemory([0xF9])
+    addToMemory([Opcode.SPHL.rawValue])
     registers.h = 0x50
     registers.l = 0x6C
 
@@ -805,7 +805,7 @@ class CPUTests: XCTestCase {
   }
 
   func testSTA() {
-    addToMemory([0x32, 0xB3, 0x05])
+    addToMemory([Opcode.STA.rawValue, 0xB3, 0x05])
     registers.a = 0x8C
 
     cpu.start()
@@ -814,7 +814,7 @@ class CPUTests: XCTestCase {
   }
 
   func testSTAX() {
-    addToMemory([0x02])
+    addToMemory([Opcode.STAX_B.rawValue])
     registers.a = 0x60
     registers.b = 0x3F
     registers.c = 0x16
@@ -825,7 +825,7 @@ class CPUTests: XCTestCase {
   }
 
   func testSTC() {
-    addToMemory([0x37])
+    addToMemory([Opcode.STC.rawValue])
 
     cpu.start()
 
@@ -833,7 +833,7 @@ class CPUTests: XCTestCase {
   }
 
   func testSUB() {
-    addToMemory([0x97])
+    addToMemory([Opcode.SUB_A.rawValue])
     registers.a = 0x3E
 
     cpu.start()
@@ -848,8 +848,8 @@ class CPUTests: XCTestCase {
 
   func testSUI() {
     addToMemory([
-      0x3E, 0x00,
-      0xD6, 0x01])
+      Opcode.MVI_A.rawValue, 0x00,
+      Opcode.SUI.rawValue,   0x01])
 
     cpu.start()
 
@@ -862,7 +862,7 @@ class CPUTests: XCTestCase {
   }
 
   func testXCHG() {
-    addToMemory([0xEB])
+    addToMemory([Opcode.XCHG.rawValue])
     registers.d = 0x33
     registers.e = 0x55
     registers.h = 0x00
@@ -877,7 +877,7 @@ class CPUTests: XCTestCase {
   }
 
   func testXTHL() {
-    addToMemory([0xE3])
+    addToMemory([Opcode.XTHL.rawValue])
     memory[0x10AD] = 0xF0
     memory[0x10AE] = 0x0D
     registers.h = 0x0B
@@ -893,7 +893,7 @@ class CPUTests: XCTestCase {
   }
 
   func testXRA() {
-    addToMemory([0xA8])
+    addToMemory([Opcode.XRA_B.rawValue])
     registers.a = 0x5C
     registers.b = 0x78
 
@@ -907,7 +907,7 @@ class CPUTests: XCTestCase {
   }
 
   func testXRI() {
-    addToMemory([0xEE, 0x81])
+    addToMemory([Opcode.XRI.rawValue, 0x81])
     registers.a = 0x3B
 
     cpu.start()
