@@ -133,8 +133,6 @@ class CPU {
     registers.h = memory[Int(address + 1)]
   }
 
-  private func nop() { }
-
   private func or(_ operand: UInt8) {
     registers.a = registers.a | operand
 
@@ -223,9 +221,10 @@ class CPU {
 
   func start() {
     while programCounter < memory.count {
-      let opcode = Opcode(rawValue: getNextByte())!
+      let opcode = Opcode(rawValue: getNextByte())
+      if opcode == nil { continue }
 
-      switch opcode {
+      switch opcode! {
       // MARK: Carry bit instructions
       case .CMC: conditionBits.carry = !conditionBits.carry
       case .STC: conditionBits.carry = true
@@ -253,22 +252,10 @@ class CPU {
       case .DAA: decimalAdjust()
 
       // MARK: NOP instruction
-      case .NOP: nop()
-//      case 0x08: nop()
-//      case 0x10: nop()
-//      case 0x18: nop()
-//      case 0x20: nop()
-//      case 0x28: nop()
-//      case 0x30: nop()
-//      case 0x38: nop()
-//      case 0xCB: nop()
-//      case 0xD9: nop()
-//      case 0xDD: nop()
-//      case 0xED: nop()
-//      case 0xFD: nop()
+      case .NOP: continue
 
       // MARK: Data transfer instructions
-      case .MOV_B_B: nop()
+      case .MOV_B_B: continue
       case .MOV_B_C: registers.b = registers.c
       case .MOV_B_D: registers.b = registers.d
       case .MOV_B_E: registers.b = registers.e
@@ -277,7 +264,7 @@ class CPU {
       case .MOV_B_M: registers.b = registers.m
       case .MOV_B_A: registers.b = registers.a
       case .MOV_C_B: registers.c = registers.b
-      case .MOV_C_C: nop()
+      case .MOV_C_C: continue
       case .MOV_C_D: registers.c = registers.d
       case .MOV_C_E: registers.c = registers.e
       case .MOV_C_H: registers.c = registers.h
@@ -286,7 +273,7 @@ class CPU {
       case .MOV_C_A: registers.c = registers.a
       case .MOV_D_B: registers.d = registers.b
       case .MOV_D_C: registers.d = registers.c
-      case .MOV_D_D: nop()
+      case .MOV_D_D: continue
       case .MOV_D_E: registers.d = registers.e
       case .MOV_D_H: registers.d = registers.h
       case .MOV_D_L: registers.d = registers.l
@@ -295,7 +282,7 @@ class CPU {
       case .MOV_E_B: registers.e = registers.b
       case .MOV_E_C: registers.e = registers.c
       case .MOV_E_D: registers.e = registers.d
-      case .MOV_E_E: nop()
+      case .MOV_E_E: continue
       case .MOV_E_H: registers.e = registers.h
       case .MOV_E_L: registers.e = registers.l
       case .MOV_E_M: registers.e = registers.m
@@ -304,7 +291,7 @@ class CPU {
       case .MOV_H_C: registers.h = registers.c
       case .MOV_H_D: registers.h = registers.d
       case .MOV_H_E: registers.h = registers.e
-      case .MOV_H_H: nop()
+      case .MOV_H_H: continue
       case .MOV_H_L: registers.h = registers.l
       case .MOV_H_M: registers.h = registers.m
       case .MOV_H_A: registers.h = registers.a
@@ -313,7 +300,7 @@ class CPU {
       case .MOV_L_D: registers.l = registers.d
       case .MOV_L_E: registers.l = registers.e
       case .MOV_L_H: registers.l = registers.h
-      case .MOV_L_L: nop()
+      case .MOV_L_L: continue
       case .MOV_L_M: registers.l = registers.m
       case .MOV_L_A: registers.l = registers.a
       case .MOV_M_B: registers.m = registers.b
@@ -330,7 +317,7 @@ class CPU {
       case .MOV_A_H: registers.a = registers.h
       case .MOV_A_L: registers.a = registers.l
       case .MOV_A_M: registers.a = registers.m
-      case .MOV_A_A: nop()
+      case .MOV_A_A: continue
 
       case .STAX_B: memory[Int(joinBytes(registerPairs.b))] = registers.a
       case .STAX_D: memory[Int(joinBytes(registerPairs.d))] = registers.a
@@ -491,47 +478,47 @@ class CPU {
       case .JPO: jump(condition: !conditionBits.parity)
 
       // MARK: Call subroutine instructions
-      case .CALL: unimplementedInstruction(instruction: opcode)
-      case .CC:   unimplementedInstruction(instruction: opcode)
-      case .CNC:  unimplementedInstruction(instruction: opcode)
-      case .CZ:   unimplementedInstruction(instruction: opcode)
-      case .CNZ:  unimplementedInstruction(instruction: opcode)
-      case .CM:   unimplementedInstruction(instruction: opcode)
-      case .CP:   unimplementedInstruction(instruction: opcode)
-      case .CPE:  unimplementedInstruction(instruction: opcode)
-      case .CPO:  unimplementedInstruction(instruction: opcode)
+      case .CALL: unimplementedInstruction(instruction: opcode!)
+      case .CC:   unimplementedInstruction(instruction: opcode!)
+      case .CNC:  unimplementedInstruction(instruction: opcode!)
+      case .CZ:   unimplementedInstruction(instruction: opcode!)
+      case .CNZ:  unimplementedInstruction(instruction: opcode!)
+      case .CM:   unimplementedInstruction(instruction: opcode!)
+      case .CP:   unimplementedInstruction(instruction: opcode!)
+      case .CPE:  unimplementedInstruction(instruction: opcode!)
+      case .CPO:  unimplementedInstruction(instruction: opcode!)
 
       // MARK: Return from subroutine instructions
-      case .RET: unimplementedInstruction(instruction: opcode)
-      case .RC:  unimplementedInstruction(instruction: opcode)
-      case .RNC: unimplementedInstruction(instruction: opcode)
-      case .RZ:  unimplementedInstruction(instruction: opcode)
-      case .RNZ: unimplementedInstruction(instruction: opcode)
-      case .RM:  unimplementedInstruction(instruction: opcode)
-      case .RP:  unimplementedInstruction(instruction: opcode)
-      case .RPE: unimplementedInstruction(instruction: opcode)
-      case .RPO: unimplementedInstruction(instruction: opcode)
+      case .RET: unimplementedInstruction(instruction: opcode!)
+      case .RC:  unimplementedInstruction(instruction: opcode!)
+      case .RNC: unimplementedInstruction(instruction: opcode!)
+      case .RZ:  unimplementedInstruction(instruction: opcode!)
+      case .RNZ: unimplementedInstruction(instruction: opcode!)
+      case .RM:  unimplementedInstruction(instruction: opcode!)
+      case .RP:  unimplementedInstruction(instruction: opcode!)
+      case .RPE: unimplementedInstruction(instruction: opcode!)
+      case .RPO: unimplementedInstruction(instruction: opcode!)
 
       // MARK: RST instruction
-      case .RST_0: unimplementedInstruction(instruction: opcode)
-      case .RST_1: unimplementedInstruction(instruction: opcode)
-      case .RST_2: unimplementedInstruction(instruction: opcode)
-      case .RST_3: unimplementedInstruction(instruction: opcode)
-      case .RST_4: unimplementedInstruction(instruction: opcode)
-      case .RST_5: unimplementedInstruction(instruction: opcode)
-      case .RST_6: unimplementedInstruction(instruction: opcode)
-      case .RST_7: unimplementedInstruction(instruction: opcode)
+      case .RST_0: unimplementedInstruction(instruction: opcode!)
+      case .RST_1: unimplementedInstruction(instruction: opcode!)
+      case .RST_2: unimplementedInstruction(instruction: opcode!)
+      case .RST_3: unimplementedInstruction(instruction: opcode!)
+      case .RST_4: unimplementedInstruction(instruction: opcode!)
+      case .RST_5: unimplementedInstruction(instruction: opcode!)
+      case .RST_6: unimplementedInstruction(instruction: opcode!)
+      case .RST_7: unimplementedInstruction(instruction: opcode!)
 
       // MARK: Interrupt flip-flop instructions
-      case .EI: unimplementedInstruction(instruction: opcode)
-      case .DI: unimplementedInstruction(instruction: opcode)
+      case .EI: unimplementedInstruction(instruction: opcode!)
+      case .DI: unimplementedInstruction(instruction: opcode!)
 
       // MARK: Input/output instructions
-      case .IN:  unimplementedInstruction(instruction: opcode)
-      case .OUT: unimplementedInstruction(instruction: opcode)
+      case .IN:  unimplementedInstruction(instruction: opcode!)
+      case .OUT: unimplementedInstruction(instruction: opcode!)
 
       // MARK: Halt instruction
-      case .HLT: unimplementedInstruction(instruction: opcode)
+      case .HLT: unimplementedInstruction(instruction: opcode!)
       }
     }
   }
