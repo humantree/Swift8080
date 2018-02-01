@@ -17,7 +17,7 @@ class CPUTests: XCTestCase {
 
     conditionBits = ConditionBits()
     memory = Data.init(repeating: Opcode.NOP.rawValue, count: 0xFFFF)
-    programCounter = Int()
+    programCounter = UInt16()
     registers = Registers()
     stackPointer = UInt16()
   }

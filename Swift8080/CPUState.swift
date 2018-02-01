@@ -11,7 +11,7 @@ import Foundation
 var conditionBits = ConditionBits()
 var interruptsEnabled = false
 var memory = Data()
-var programCounter = Int()
+var programCounter = UInt16()
 var registerPairs = RegisterPairs()
 var registers = Registers()
 var stackPointer = UInt16()

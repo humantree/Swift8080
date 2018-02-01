@@ -16,7 +16,7 @@ enum Direction {
 class CPU {
   private func getNextByte() -> UInt8 {
     programCounter += 1
-    return memory[programCounter - 1]
+    return memory[Int(programCounter - 1)]
   }
 
   private func getNextTwoBytes() -> (UInt8, UInt8) {
@@ -125,7 +125,7 @@ class CPU {
 
   private func jump(condition: Bool = true) {
     let address = joinBytes(getNextTwoBytes())
-    if condition { programCounter = Int(address) }
+    if condition { programCounter = address }
   }
 
   private func load(_ address: UInt16) {
@@ -465,7 +465,7 @@ class CPU {
       case .LHLD: load(joinBytes(getNextTwoBytes()))
 
       // MARK: Jump instructions
-      case .PCHL: programCounter = Int(joinBytes(registerPairs.h))
+      case .PCHL: programCounter = joinBytes(registerPairs.h)
 
       case .JMP: jump()
       case .JC:  jump(condition:  conditionBits.carry)
