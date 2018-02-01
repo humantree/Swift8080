@@ -510,8 +510,8 @@ class CPU {
       case .RST_7: unimplementedInstruction(instruction: opcode!)
 
       // MARK: Interrupt flip-flop instructions
-      case .EI: unimplementedInstruction(instruction: opcode!)
-      case .DI: unimplementedInstruction(instruction: opcode!)
+      case .EI: interruptsEnabled = true
+      case .DI: interruptsEnabled = false
 
       // MARK: Input/output instructions
       case .IN:  unimplementedInstruction(instruction: opcode!)

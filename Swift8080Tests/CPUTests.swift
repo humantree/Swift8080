@@ -285,6 +285,23 @@ class CPUTests: XCTestCase {
     XCTAssertEqual(registers.l, 0xFF)
   }
 
+  func testDI() {
+    addToMemory([Opcode.DI.rawValue])
+    interruptsEnabled = true
+
+    cpu.start()
+
+    XCTAssertFalse(interruptsEnabled)
+  }
+
+  func testEI() {
+    addToMemory([Opcode.EI.rawValue])
+
+    cpu.start()
+
+    XCTAssertTrue(interruptsEnabled)
+  }
+
   func testINR() {
     addToMemory([Opcode.INR_C.rawValue])
     registers.c = 0x99
