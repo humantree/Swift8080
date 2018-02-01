@@ -514,11 +514,13 @@ class CPU {
       case .DI: interruptsEnabled = false
 
       // MARK: Input/output instructions
-      case .IN:  unimplementedInstruction(instruction: opcode!)
-      case .OUT: unimplementedInstruction(instruction: opcode!)
+      case .IN:  _ = getNextByte()
+                     unimplementedInstruction(instruction: opcode!)
+      case .OUT: _ = getNextByte()
+                     unimplementedInstruction(instruction: opcode!)
 
       // MARK: Halt instruction
-      case .HLT: unimplementedInstruction(instruction: opcode!)
+      case .HLT: exit(0)
       }
     }
   }
