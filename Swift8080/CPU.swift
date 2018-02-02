@@ -14,32 +14,32 @@ enum Direction {
 }
 
 class CPU {
-  private func getNextByte() -> UInt8 {
+  internal func getNextByte() -> UInt8 {
     programCounter += 1
     return memory[Int(programCounter - 1)]
   }
 
-  private func getNextTwoBytes() -> (UInt8, UInt8) {
+  internal func getNextTwoBytes() -> (UInt8, UInt8) {
     let lowData = getNextByte()
     return (getNextByte(), lowData)
   }
 
-  private func joinBytes(_ bytes: (UInt8, UInt8)) -> UInt16 {
+  internal func joinBytes(_ bytes: (UInt8, UInt8)) -> UInt16 {
     return UInt16(bytes.0) << 8 + UInt16(bytes.1)
   }
 
-  private func splitBytes(_ double: UInt16) -> (UInt8, UInt8) {
+  internal func splitBytes(_ double: UInt16) -> (UInt8, UInt8) {
     return (UInt8(double >> 8), UInt8(double & 0xFF))
   }
 
-  private func unimplementedInstruction(instruction: Opcode) {
+  internal func unimplementedInstruction(instruction: Opcode) {
     let hex = String(format: "%02X", instruction.rawValue)
     print("Error: Unimplemented instruction (\(hex))")
   }
 
   // MARK: -
 
-  private func add(_ operand: UInt8, carry: Bool = false) {
+  internal func add(_ operand: UInt8, carry: Bool = false) {
     var nibbleResult = registers.a & 0xF + operand & 0xF
     var result = UInt16(registers.a) + UInt16(operand)
     
@@ -55,26 +55,26 @@ class CPU {
     conditionBits.setParitySignZero(registers.a)
   }
 
-  private func add(_ operand: UInt16) {
+  internal func add(_ operand: UInt16) {
     let result = UInt32(joinBytes(registerPairs.h)) + UInt32(operand)
 
     registerPairs.h = splitBytes(UInt16(result & 0xFFFF))
     conditionBits.setCarry(registers.h, UInt16(result >> 8))
   }
 
-  private func and(_ operand: UInt8) {
+  internal func and(_ operand: UInt8) {
     registers.a = registers.a & operand
 
     conditionBits.carry = false
     conditionBits.setParitySignZero(registers.a)
   }
 
-  private func call(condition: Bool = true) {
+  internal func call(condition: Bool = true) {
     push(splitBytes(programCounter + 2))
     jump(condition: condition)
   }
 
-  private func decimalAdjust() {
+  internal func decimalAdjust() {
     if registers.a & 0xF > 9 || conditionBits.auxiliaryCarry {
       registers.a += 6
       conditionBits.auxiliaryCarry = true
@@ -91,7 +91,7 @@ class CPU {
     conditionBits.setParitySignZero(registers.a)
   }
 
-  private func decrement(_ operand: inout UInt8) {
+  internal func decrement(_ operand: inout UInt8) {
     let nibbleResult = operand & 0xF + 0xF
     operand = operand &- 1
 
@@ -99,17 +99,17 @@ class CPU {
     conditionBits.setParitySignZero(operand)
   }
 
-  private func decrement(_ operand: inout (UInt8, UInt8)) {
+  internal func decrement(_ operand: inout (UInt8, UInt8)) {
     operand = splitBytes(joinBytes(operand) &- 1)
   }
 
-  private func exchange() {
+  internal func exchange() {
     let temporary = registerPairs.h
     registerPairs.h = registerPairs.d
     registerPairs.d = temporary
   }
 
-  private func exchangeStack() {
+  internal func exchangeStack() {
     let temporary = (memory[Int(stackPointer + 1)],
                      memory[Int(stackPointer)])
     memory[Int(stackPointer + 1)] = registers.h
@@ -117,68 +117,68 @@ class CPU {
     registerPairs.h = temporary
   }
 
-  private func increment(_ operand: inout UInt8) {
+  internal func increment(_ operand: inout UInt8) {
     operand = operand &+ 1
 
     conditionBits.setAuxiliaryCarry(operand & 0xF)
     conditionBits.setParitySignZero(operand)
   }
 
-  private func increment(_ operand: inout (UInt8, UInt8)) {
+  internal func increment(_ operand: inout (UInt8, UInt8)) {
     operand = splitBytes(joinBytes(operand) &+ 1)
   }
 
-  private func jump(condition: Bool = true) {
+  internal func jump(condition: Bool = true) {
     let address = joinBytes(getNextTwoBytes())
     if condition { programCounter = address }
   }
 
-  private func load(_ address: UInt16) {
+  internal func load(_ address: UInt16) {
     registers.l = memory[Int(address)]
     registers.h = memory[Int(address + 1)]
   }
 
-  private func or(_ operand: UInt8) {
+  internal func or(_ operand: UInt8) {
     registers.a = registers.a | operand
 
     conditionBits.carry = false
     conditionBits.setParitySignZero(registers.a)
   }
 
-  private func pop() -> (UInt8, UInt8) {
+  internal func pop() -> (UInt8, UInt8) {
     let second = popByte()
     let first = popByte()
     return (first, second)
   }
 
-  private func popByte() -> UInt8 {
+  internal func popByte() -> UInt8 {
     let byte = memory[Int(stackPointer)]
     stackPointer += 1
     return byte
   }
 
-  private func push(_ byte: UInt8) {
+  internal func push(_ byte: UInt8) {
     stackPointer -= 1
     memory[Int(stackPointer)] = byte
   }
 
-  private func push(_ bytes: (UInt8, UInt8)) {
+  internal func push(_ bytes: (UInt8, UInt8)) {
     push(bytes.0)
     push(bytes.1)
   }
 
-  private func restart(_ routine: UInt8) {
+  internal func restart(_ routine: UInt8) {
     push(splitBytes(programCounter))
     programCounter = UInt16(routine << 3)
   }
 
-  private func ret(condition: Bool = true) {
+  internal func ret(condition: Bool = true) {
     if condition {
       programCounter = joinBytes(pop())
     }
   }
 
-  private func rotate(_ direction: Direction, carry: Bool = false) {
+  internal func rotate(_ direction: Direction, carry: Bool = false) {
     let bitMask: UInt8 = direction == .left ? 0x80 : 0x01
     let carryValue = conditionBits.carry;
     conditionBits.carry = registers.a & bitMask == bitMask
@@ -197,12 +197,12 @@ class CPU {
     registers.a = UInt8(rotated & 0xFF)
   }
 
-  private func store(_ address: UInt16) {
+  internal func store(_ address: UInt16) {
     memory[Int(address)] = registers.l
     memory[Int(address + 1)] = registers.h
   }
 
-  private func sub(_ operand: UInt8,
+  internal func sub(_ operand: UInt8,
                    borrow: Bool = false,
                    saveResult: Bool = true) {
 
@@ -226,7 +226,7 @@ class CPU {
     }
   }
 
-  private func xor(_ operand: UInt8) {
+  internal func xor(_ operand: UInt8) {
     registers.a = registers.a ^ operand
 
     conditionBits.carry = false

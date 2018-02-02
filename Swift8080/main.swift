@@ -8,11 +8,9 @@
 
 import Foundation
 
-let cpu = CPU()
+var cpu = CPU()
 
-let romURL = Bundle.main.url(forResource: "rom", withExtension: nil)!
-let romData = try Data.init(contentsOf: romURL)
-
-memory.replaceSubrange(0..<romData.count, with: romData)
+//try loadROM("rom")
+try loadCPUDiag()
 
 cpu.start()

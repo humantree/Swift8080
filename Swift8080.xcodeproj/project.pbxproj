@@ -17,6 +17,9 @@
 		745B1805202424DA00ACE369 /* Debugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B1804202424DA00ACE369 /* Debugger.swift */; };
 		745B18062024262100ACE369 /* Debugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B1804202424DA00ACE369 /* Debugger.swift */; };
 		745B181320242F3C00ACE369 /* rom in CopyFiles */ = {isa = PBXBuildFile; fileRef = 745B18082024295800ACE369 /* rom */; };
+		745B181920245DB000ACE369 /* cpudiag.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 745B181720245D3800ACE369 /* cpudiag.bin */; };
+		745B181D2024866E00ACE369 /* ROM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B181C2024866E00ACE369 /* ROM.swift */; };
+		745B181F2024874E00ACE369 /* CPUDiag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B181E2024874E00ACE369 /* CPUDiag.swift */; };
 		74EF60DA201F10DB00FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
 		74EF60DB201F2DA300FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
 /* End PBXBuildFile section */
@@ -28,6 +31,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				745B181920245DB000ACE369 /* cpudiag.bin in CopyFiles */,
 				745B181320242F3C00ACE369 /* rom in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -44,6 +48,10 @@
 		742244DF1FF2325700B7C970 /* CPUTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUTests.swift; sourceTree = "<group>"; };
 		745B1804202424DA00ACE369 /* Debugger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debugger.swift; sourceTree = "<group>"; };
 		745B18082024295800ACE369 /* rom */ = {isa = PBXFileReference; lastKnownFileType = file; path = rom; sourceTree = "<group>"; };
+		745B181720245D3800ACE369 /* cpudiag.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = cpudiag.bin; sourceTree = "<group>"; };
+		745B181B20245F2000ACE369 /* cpudiag.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; path = cpudiag.asm; sourceTree = "<group>"; };
+		745B181C2024866E00ACE369 /* ROM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ROM.swift; sourceTree = "<group>"; };
+		745B181E2024874E00ACE369 /* CPUDiag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUDiag.swift; sourceTree = "<group>"; };
 		74EF60D9201F10DB00FA0D79 /* Opcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opcode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,12 +94,14 @@
 		742244C41FEE222900B7C970 /* Swift8080 */ = {
 			isa = PBXGroup;
 			children = (
-				745B180920242AA400ACE369 /* Resources */,
-				742244CD1FEF19CC00B7C970 /* CPUState.swift */,
 				742244CF1FF22D3400B7C970 /* CPU.swift */,
+				745B181E2024874E00ACE369 /* CPUDiag.swift */,
+				742244CD1FEF19CC00B7C970 /* CPUState.swift */,
 				745B1804202424DA00ACE369 /* Debugger.swift */,
 				742244C51FEE222900B7C970 /* main.swift */,
 				74EF60D9201F10DB00FA0D79 /* Opcode.swift */,
+				745B181C2024866E00ACE369 /* ROM.swift */,
+				745B180920242AA400ACE369 /* Resources */,
 			);
 			path = Swift8080;
 			sourceTree = "<group>";
@@ -108,6 +118,8 @@
 		745B180920242AA400ACE369 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				745B181B20245F2000ACE369 /* cpudiag.asm */,
+				745B181720245D3800ACE369 /* cpudiag.bin */,
 				745B18082024295800ACE369 /* rom */,
 			);
 			path = Resources;
@@ -204,8 +216,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				745B181F2024874E00ACE369 /* CPUDiag.swift in Sources */,
 				742244CE1FEF19CC00B7C970 /* CPUState.swift in Sources */,
 				74EF60DA201F10DB00FA0D79 /* Opcode.swift in Sources */,
+				745B181D2024866E00ACE369 /* ROM.swift in Sources */,
 				742244C61FEE222900B7C970 /* main.swift in Sources */,
 				745B1805202424DA00ACE369 /* Debugger.swift in Sources */,
 				742244D01FF22D3400B7C970 /* CPU.swift in Sources */,
