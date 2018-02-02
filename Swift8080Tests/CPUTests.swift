@@ -1110,7 +1110,66 @@ class CPUTests: XCTestCase {
     XCTAssertEqual(registers.a, 0xB5)
     XCTAssertFalse(conditionBits.carry)
   }
-  
+
+  func testRC1() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RC.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.carry = true
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x20)
+  }
+
+  func testRC2() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RC.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.carry = false
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x30)
+  }
+
+  func testRET() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RET.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x20)
+  }
+
   func testRLC() {
     addToMemory([Opcode.RLC.rawValue])
     registers.a = 0xF2
@@ -1121,6 +1180,246 @@ class CPUTests: XCTestCase {
     XCTAssertTrue(conditionBits.carry)
   }
 
+  func testRM1() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RM.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.sign = true
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x20)
+  }
+
+  func testRM2() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RM.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.sign = false
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x30)
+  }
+
+  func testRNC1() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RNC.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.carry = false
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x20)
+  }
+
+  func testRNC2() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RNC.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.carry = true
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x30)
+  }
+
+  func testRNZ1() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RNZ.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.zero = false
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x20)
+  }
+
+  func testRNZ2() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RNZ.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.zero = true
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x30)
+  }
+
+  func testRP1() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RP.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.sign = false
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x20)
+  }
+
+  func testRP2() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RP.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.sign = true
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x30)
+  }
+
+  func testRPE1() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RPE.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.parity = true
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x20)
+  }
+
+  func testRPE2() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RPE.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.parity = false
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x30)
+  }
+
+  func testRPO1() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RPO.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.parity = false
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x20)
+  }
+
+  func testRPO2() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RPO.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.parity = true
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x30)
+  }
+
   func testRRC() {
     addToMemory([Opcode.RRC.rawValue])
     registers.a = 0xF2
@@ -1129,6 +1428,46 @@ class CPUTests: XCTestCase {
 
     XCTAssertEqual(registers.a, 0x79)
     XCTAssertFalse(conditionBits.carry)
+  }
+
+  func testRZ1() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RZ.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.zero = true
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x20)
+  }
+
+  func testRZ2() {
+    memory[0x0100] = Opcode.MOV_A_B.rawValue
+    memory[0x0101] = Opcode.RZ.rawValue
+    memory[0x0102] = Opcode.MOV_A_C.rawValue
+
+    memory[0x0020] = 0xD0
+    memory[0x0021] = 0x00
+
+    registers.b = 0x20
+    registers.c = 0x30
+
+    conditionBits.zero = false
+    programCounter = 0x0100
+    stackPointer = 0x20
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x30)
   }
 
   func testSBB() {

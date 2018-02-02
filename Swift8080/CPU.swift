@@ -167,8 +167,10 @@ class CPU {
     push(bytes.1)
   }
 
-  private func ret() {
-    programCounter = joinBytes(pop())
+  private func ret(condition: Bool = true) {
+    if condition {
+      programCounter = joinBytes(pop())
+    }
   }
 
   private func rotate(_ direction: Direction, carry: Bool = false) {
@@ -499,14 +501,14 @@ class CPU {
 
       // MARK: Return from subroutine instructions
       case .RET: ret()
-      case .RC:  unimplementedInstruction(instruction: opcode!)
-      case .RNC: unimplementedInstruction(instruction: opcode!)
-      case .RZ:  unimplementedInstruction(instruction: opcode!)
-      case .RNZ: unimplementedInstruction(instruction: opcode!)
-      case .RM:  unimplementedInstruction(instruction: opcode!)
-      case .RP:  unimplementedInstruction(instruction: opcode!)
-      case .RPE: unimplementedInstruction(instruction: opcode!)
-      case .RPO: unimplementedInstruction(instruction: opcode!)
+      case .RC:  ret(condition:  conditionBits.carry)
+      case .RNC: ret(condition: !conditionBits.carry)
+      case .RZ:  ret(condition:  conditionBits.zero)
+      case .RNZ: ret(condition: !conditionBits.zero)
+      case .RM:  ret(condition:  conditionBits.sign)
+      case .RP:  ret(condition: !conditionBits.sign)
+      case .RPE: ret(condition:  conditionBits.parity)
+      case .RPO: ret(condition: !conditionBits.parity)
 
       // MARK: RST instruction
       case .RST_0: unimplementedInstruction(instruction: opcode!)
@@ -524,9 +526,9 @@ class CPU {
 
       // MARK: Input/output instructions
       case .IN:  _ = getNextByte()
-                     unimplementedInstruction(instruction: opcode!)
+                 unimplementedInstruction(instruction: opcode!)
       case .OUT: _ = getNextByte()
-                     unimplementedInstruction(instruction: opcode!)
+                 unimplementedInstruction(instruction: opcode!)
 
       // MARK: Halt instruction
       case .HLT: exit(0)
