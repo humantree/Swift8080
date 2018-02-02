@@ -20,6 +20,8 @@
 		745B181920245DB000ACE369 /* cpudiag.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 745B181720245D3800ACE369 /* cpudiag.bin */; };
 		745B181D2024866E00ACE369 /* ROM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B181C2024866E00ACE369 /* ROM.swift */; };
 		745B181F2024874E00ACE369 /* CPUDiag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B181E2024874E00ACE369 /* CPUDiag.swift */; };
+		745B182020248E6500ACE369 /* CPUDiag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B181E2024874E00ACE369 /* CPUDiag.swift */; };
+		745B182120248E7500ACE369 /* ROM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B181C2024866E00ACE369 /* ROM.swift */; };
 		74EF60DA201F10DB00FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
 		74EF60DB201F2DA300FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
 /* End PBXBuildFile section */
@@ -230,7 +232,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				745B182020248E6500ACE369 /* CPUDiag.swift in Sources */,
 				745B18062024262100ACE369 /* Debugger.swift in Sources */,
+				745B182120248E7500ACE369 /* ROM.swift in Sources */,
 				74EF60DB201F2DA300FA0D79 /* Opcode.swift in Sources */,
 				742244E11FF235DE00B7C970 /* CPUState.swift in Sources */,
 				742244E01FF2325700B7C970 /* CPUTests.swift in Sources */,

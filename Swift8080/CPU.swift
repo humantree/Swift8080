@@ -211,8 +211,8 @@ class CPU {
     var result = UInt16(registers.a) &- UInt16(operand)
 
     if borrow {
-      nibbleResult -= UInt8(conditionBits.carry.hashValue)
-      result -= UInt16(conditionBits.carry.hashValue)
+      nibbleResult = nibbleResult &- UInt8(conditionBits.carry.hashValue)
+      result = result &- UInt16(conditionBits.carry.hashValue)
     }
 
     let result8 = UInt8(result & 0xFF)
