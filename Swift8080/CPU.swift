@@ -75,14 +75,14 @@ class CPU {
   }
 
   internal func decimalAdjust() {
-    if registers.a & 0xF > 9 || conditionBits.auxiliaryCarry {
+    if registers.a & 0x0F > 0x09 || conditionBits.auxiliaryCarry {
       registers.a += 6
       conditionBits.auxiliaryCarry = true
     } else {
       conditionBits.auxiliaryCarry = false
     }
 
-    if registers.a & 0xF0 > 9 || conditionBits.carry {
+    if registers.a & 0xF0 > 0x90 || conditionBits.carry {
       let result = UInt16(registers.a) + 0x60
       registers.a = UInt8(result & 0xFF)
       conditionBits.setCarry(registers.a, result)
@@ -141,6 +141,7 @@ class CPU {
   internal func or(_ operand: UInt8) {
     registers.a = registers.a | operand
 
+    conditionBits.auxiliaryCarry = false
     conditionBits.carry = false
     conditionBits.setParitySignZero(registers.a)
   }
