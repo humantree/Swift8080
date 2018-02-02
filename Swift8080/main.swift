@@ -10,10 +10,9 @@ import Foundation
 
 let cpu = CPU()
 
-memory = Data(bytes: [0x97])
-registers.a = 0x3E
+let romURL = Bundle.main.url(forResource: "rom", withExtension: nil)!
+let romData = try Data.init(contentsOf: romURL)
+
+memory.replaceSubrange(0..<romData.count, with: romData)
 
 cpu.start()
-
-print(registers)
-print(conditionBits)

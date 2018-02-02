@@ -16,6 +16,7 @@
 		742244E31FF235DE00B7C970 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742244C51FEE222900B7C970 /* main.swift */; };
 		745B1805202424DA00ACE369 /* Debugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B1804202424DA00ACE369 /* Debugger.swift */; };
 		745B18062024262100ACE369 /* Debugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B1804202424DA00ACE369 /* Debugger.swift */; };
+		745B181320242F3C00ACE369 /* rom in CopyFiles */ = {isa = PBXBuildFile; fileRef = 745B18082024295800ACE369 /* rom */; };
 		74EF60DA201F10DB00FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
 		74EF60DB201F2DA300FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
 /* End PBXBuildFile section */
@@ -23,12 +24,13 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		742244C01FEE222900B7C970 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 7;
 			files = (
+				745B181320242F3C00ACE369 /* rom in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -41,6 +43,7 @@
 		742244DB1FF231BD00B7C970 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		742244DF1FF2325700B7C970 /* CPUTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUTests.swift; sourceTree = "<group>"; };
 		745B1804202424DA00ACE369 /* Debugger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debugger.swift; sourceTree = "<group>"; };
+		745B18082024295800ACE369 /* rom */ = {isa = PBXFileReference; lastKnownFileType = file; path = rom; sourceTree = "<group>"; };
 		74EF60D9201F10DB00FA0D79 /* Opcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opcode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,6 +86,7 @@
 		742244C41FEE222900B7C970 /* Swift8080 */ = {
 			isa = PBXGroup;
 			children = (
+				745B180920242AA400ACE369 /* Resources */,
 				742244CD1FEF19CC00B7C970 /* CPUState.swift */,
 				742244CF1FF22D3400B7C970 /* CPU.swift */,
 				745B1804202424DA00ACE369 /* Debugger.swift */,
@@ -99,6 +103,14 @@
 				742244DF1FF2325700B7C970 /* CPUTests.swift */,
 			);
 			path = Swift8080Tests;
+			sourceTree = "<group>";
+		};
+		745B180920242AA400ACE369 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				745B18082024295800ACE369 /* rom */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

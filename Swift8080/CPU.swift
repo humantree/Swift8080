@@ -240,7 +240,7 @@ class CPU {
       let opcode = Opcode(rawValue: getNextByte())
       if opcode == nil { continue }
 
-      log(opcode!)
+      log(opcode: opcode!)
 
       switch opcode! {
       // MARK: Carry bit instructions

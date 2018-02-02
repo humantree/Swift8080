@@ -11,7 +11,7 @@ import Foundation
 let debug = true
 let skipNOP = true
 
-func log(_ opcode: Opcode) {
+func log(opcode: Opcode) {
   if !debug { return }
   if skipNOP && opcode == .NOP { return }
 

@@ -10,7 +10,7 @@ import Foundation
 
 var conditionBits = ConditionBits()
 var interruptsEnabled = false
-var memory = Data()
+var memory = Data.init(repeating: 0, count: 0xFFFF)
 var programCounter = UInt16()
 var registerPairs = RegisterPairs()
 var registers = Registers()
