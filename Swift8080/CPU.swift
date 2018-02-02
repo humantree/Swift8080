@@ -240,6 +240,8 @@ class CPU {
       let opcode = Opcode(rawValue: getNextByte())
       if opcode == nil { continue }
 
+      log(opcode!)
+
       switch opcode! {
       // MARK: Carry bit instructions
       case .CMC: conditionBits.carry = !conditionBits.carry
