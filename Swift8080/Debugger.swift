@@ -22,7 +22,7 @@ func logDisassembly(_ opcode: Opcode) {
     log += " "
 
     for i in (1...opcode.additionalBytes).reversed() {
-      let byte = memory[Int(programCounter) + i]
+      let byte = memory[Int(programCounter) + i - 1]
       log += String(format: "%02X", byte)
     }
   }
