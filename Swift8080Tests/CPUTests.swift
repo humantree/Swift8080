@@ -932,9 +932,14 @@ class CPUTests: XCTestCase {
   }
 
   func testLHLD() {
-    addToMemory([Opcode.LHLD.rawValue, 0x5B, 0x02])
+    memory[0x0300] = Opcode.LHLD.rawValue
+    memory[0x0301] = 0x5B
+    memory[0x0302] = 0x02
+
     memory[0x025B] = 0xFF
     memory[0x025C] = 0x03
+
+    programCounter = 0x0300
 
     cpu.start()
 
@@ -971,10 +976,14 @@ class CPUTests: XCTestCase {
   }
 
   func testMVI() {
-    addToMemory([
-      Opcode.MVI_H.rawValue, 0x3C,
-      Opcode.MVI_L.rawValue, 0xF4,
-      Opcode.MVI_M.rawValue, 0xFF])
+    memory[0x4000] = Opcode.MVI_H.rawValue
+    memory[0x4001] = 0x3C
+    memory[0x4002] = Opcode.MVI_L.rawValue
+    memory[0x4003] = 0xF4
+    memory[0x4004] = Opcode.MVI_M.rawValue
+    memory[0x4005] = 0xFF
+
+    programCounter = 0x4000
 
     cpu.start()
 
@@ -1428,6 +1437,21 @@ class CPUTests: XCTestCase {
 
     XCTAssertEqual(registers.a, 0x79)
     XCTAssertFalse(conditionBits.carry)
+  }
+
+  func testRST() {
+    memory[0x10] = Opcode.NOP.rawValue
+    memory[0x11] = Opcode.RST_4.rawValue
+    memory[0x1F] = Opcode.MOV_A_B.rawValue
+
+    registers.b = 0xDC
+    stackPointer = 0x08
+
+    cpu.start()
+
+    XCTAssertEqual(registers.a, 0x00)
+    XCTAssertEqual(memory[0x07], 0x00)
+    XCTAssertEqual(memory[0x06], 0x12)
   }
 
   func testRZ1() {

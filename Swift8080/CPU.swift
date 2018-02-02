@@ -167,6 +167,11 @@ class CPU {
     push(bytes.1)
   }
 
+  private func restart(_ routine: UInt8) {
+    push(splitBytes(programCounter))
+    programCounter = UInt16(routine << 3)
+  }
+
   private func ret(condition: Bool = true) {
     if condition {
       programCounter = joinBytes(pop())
@@ -511,14 +516,14 @@ class CPU {
       case .RPO: ret(condition: !conditionBits.parity)
 
       // MARK: RST instruction
-      case .RST_0: unimplementedInstruction(instruction: opcode!)
-      case .RST_1: unimplementedInstruction(instruction: opcode!)
-      case .RST_2: unimplementedInstruction(instruction: opcode!)
-      case .RST_3: unimplementedInstruction(instruction: opcode!)
-      case .RST_4: unimplementedInstruction(instruction: opcode!)
-      case .RST_5: unimplementedInstruction(instruction: opcode!)
-      case .RST_6: unimplementedInstruction(instruction: opcode!)
-      case .RST_7: unimplementedInstruction(instruction: opcode!)
+      case .RST_0: restart(0)
+      case .RST_1: restart(1)
+      case .RST_2: restart(2)
+      case .RST_3: restart(3)
+      case .RST_4: restart(4)
+      case .RST_5: restart(5)
+      case .RST_6: restart(6)
+      case .RST_7: restart(7)
 
       // MARK: Interrupt flip-flop instructions
       case .EI: interruptsEnabled = true
