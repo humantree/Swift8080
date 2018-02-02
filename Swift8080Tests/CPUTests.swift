@@ -304,7 +304,7 @@ class CPUTests: XCTestCase {
     registers.b = 0x20
     registers.c = 0x30
 
-    conditionBits.zero = true
+    conditionBits.zero = false
     programCounter = 0xF0
     stackPointer = 0xD0
 
@@ -325,7 +325,7 @@ class CPUTests: XCTestCase {
     registers.b = 0x20
     registers.c = 0x30
 
-    conditionBits.zero = false
+    conditionBits.zero = true
     programCounter = 0xF0
     stackPointer = 0xD0
 
@@ -472,7 +472,7 @@ class CPUTests: XCTestCase {
     registers.b = 0x20
     registers.c = 0x30
 
-    conditionBits.zero = false
+    conditionBits.zero = true
     programCounter = 0xF0
     stackPointer = 0xD0
 
@@ -493,7 +493,7 @@ class CPUTests: XCTestCase {
     registers.b = 0x20
     registers.c = 0x30
 
-    conditionBits.zero = true
+    conditionBits.zero = false
     programCounter = 0xF0
     stackPointer = 0xD0
 
