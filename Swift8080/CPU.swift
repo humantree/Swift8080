@@ -69,6 +69,11 @@ class CPU {
     conditionBits.setParitySignZero(registers.a)
   }
 
+  private func call(condition: Bool = true) {
+    push(splitBytes(programCounter + 2))
+    jump(condition: condition)
+  }
+
   private func decimalAdjust() {
     if registers.a & 0xF > 9 || conditionBits.auxiliaryCarry {
       registers.a += 6
@@ -160,6 +165,10 @@ class CPU {
   private func push(_ bytes: (UInt8, UInt8)) {
     push(bytes.0)
     push(bytes.1)
+  }
+
+  private func ret() {
+    programCounter = joinBytes(pop())
   }
 
   private func rotate(_ direction: Direction, carry: Bool = false) {
@@ -478,18 +487,18 @@ class CPU {
       case .JPO: jump(condition: !conditionBits.parity)
 
       // MARK: Call subroutine instructions
-      case .CALL: unimplementedInstruction(instruction: opcode!)
-      case .CC:   unimplementedInstruction(instruction: opcode!)
-      case .CNC:  unimplementedInstruction(instruction: opcode!)
-      case .CZ:   unimplementedInstruction(instruction: opcode!)
-      case .CNZ:  unimplementedInstruction(instruction: opcode!)
-      case .CM:   unimplementedInstruction(instruction: opcode!)
-      case .CP:   unimplementedInstruction(instruction: opcode!)
-      case .CPE:  unimplementedInstruction(instruction: opcode!)
-      case .CPO:  unimplementedInstruction(instruction: opcode!)
+      case .CALL: call()
+      case .CC:   call(condition:  conditionBits.carry)
+      case .CNC:  call(condition: !conditionBits.carry)
+      case .CZ:   call(condition: !conditionBits.zero)
+      case .CNZ:  call(condition:  conditionBits.zero)
+      case .CM:   call(condition:  conditionBits.sign)
+      case .CP:   call(condition: !conditionBits.sign)
+      case .CPE:  call(condition:  conditionBits.parity)
+      case .CPO:  call(condition: !conditionBits.parity)
 
       // MARK: Return from subroutine instructions
-      case .RET: unimplementedInstruction(instruction: opcode!)
+      case .RET: ret()
       case .RC:  unimplementedInstruction(instruction: opcode!)
       case .RNC: unimplementedInstruction(instruction: opcode!)
       case .RZ:  unimplementedInstruction(instruction: opcode!)
