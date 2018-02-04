@@ -70,7 +70,7 @@ class CPU {
   }
 
   internal func call(condition: Bool = true) {
-    push(splitBytes(programCounter + 2))
+    if condition { push(splitBytes(programCounter + 2)) }
     jump(condition: condition)
   }
 
