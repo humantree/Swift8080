@@ -49,9 +49,8 @@ class CPUDiag: XCTestCase {
 
   func testRunCPUDiag() {
     do {
-      let directory = FileManager.default.urls(for: .documentDirectory,
-                                               in: .userDomainMask).first!
-      let logURL = directory.appendingPathComponent("console.log")
+      let directory = NSURL(fileURLWithPath: NSTemporaryDirectory())
+      let logURL = directory.appendingPathComponent("console.log")!
 
       try loadROM("cpudiag", withExtension: "bin",
                   atLocation: 0x0100,

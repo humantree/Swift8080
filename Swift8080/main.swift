@@ -12,4 +12,5 @@ var cpu = CPU()
 
 try loadROM("rom")
 
+debug = true
 cpu.start()
