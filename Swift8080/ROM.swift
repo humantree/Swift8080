@@ -10,10 +10,11 @@ import Foundation
 
 func loadROM(_ filename: String,
              withExtension fileExtension: String? = nil,
-             atLocation location: Int = 0) throws {
+             atLocation location: Int = 0,
+             fromBundle bundle: Bundle = Bundle.main) throws {
 
-  let romURL = Bundle.main.url(forResource: filename,
-                               withExtension: fileExtension)!
+  let romURL = bundle.url(forResource: filename,
+                          withExtension: fileExtension)!
   let romData = try Data.init(contentsOf: romURL)
   let romRange = location..<romData.count + location
 

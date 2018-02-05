@@ -19,11 +19,11 @@
 		745B181320242F3C00ACE369 /* rom in CopyFiles */ = {isa = PBXBuildFile; fileRef = 745B18082024295800ACE369 /* rom */; };
 		745B181920245DB000ACE369 /* cpudiag.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 745B181720245D3800ACE369 /* cpudiag.bin */; };
 		745B181D2024866E00ACE369 /* ROM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B181C2024866E00ACE369 /* ROM.swift */; };
-		745B181F2024874E00ACE369 /* CPUDiag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B181E2024874E00ACE369 /* CPUDiag.swift */; };
 		745B182020248E6500ACE369 /* CPUDiag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B181E2024874E00ACE369 /* CPUDiag.swift */; };
 		745B182120248E7500ACE369 /* ROM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B181C2024866E00ACE369 /* ROM.swift */; };
 		74EF60DA201F10DB00FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
 		74EF60DB201F2DA300FA0D79 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EF60D9201F10DB00FA0D79 /* Opcode.swift */; };
+		74FADD5620285B0E00F9C835 /* cpudiag.bin in Resources */ = {isa = PBXBuildFile; fileRef = 745B181720245D3800ACE369 /* cpudiag.bin */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,7 +51,6 @@
 		745B1804202424DA00ACE369 /* Debugger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debugger.swift; sourceTree = "<group>"; };
 		745B18082024295800ACE369 /* rom */ = {isa = PBXFileReference; lastKnownFileType = file; path = rom; sourceTree = "<group>"; };
 		745B181720245D3800ACE369 /* cpudiag.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = cpudiag.bin; sourceTree = "<group>"; };
-		745B181B20245F2000ACE369 /* cpudiag.asm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm.asm; path = cpudiag.asm; sourceTree = "<group>"; };
 		745B181C2024866E00ACE369 /* ROM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ROM.swift; sourceTree = "<group>"; };
 		745B181E2024874E00ACE369 /* CPUDiag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUDiag.swift; sourceTree = "<group>"; };
 		74EF60D9201F10DB00FA0D79 /* Opcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opcode.swift; sourceTree = "<group>"; };
@@ -97,7 +96,6 @@
 			isa = PBXGroup;
 			children = (
 				742244CF1FF22D3400B7C970 /* CPU.swift */,
-				745B181E2024874E00ACE369 /* CPUDiag.swift */,
 				742244CD1FEF19CC00B7C970 /* CPUState.swift */,
 				745B1804202424DA00ACE369 /* Debugger.swift */,
 				742244C51FEE222900B7C970 /* main.swift */,
@@ -111,6 +109,7 @@
 		742244D81FF231BD00B7C970 /* Swift8080Tests */ = {
 			isa = PBXGroup;
 			children = (
+				745B181E2024874E00ACE369 /* CPUDiag.swift */,
 				742244DB1FF231BD00B7C970 /* Info.plist */,
 				742244DF1FF2325700B7C970 /* CPUTests.swift */,
 			);
@@ -120,7 +119,6 @@
 		745B180920242AA400ACE369 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				745B181B20245F2000ACE369 /* cpudiag.asm */,
 				745B181720245D3800ACE369 /* cpudiag.bin */,
 				745B18082024295800ACE369 /* rom */,
 			);
@@ -208,6 +206,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74FADD5620285B0E00F9C835 /* cpudiag.bin in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,7 +217,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				745B181F2024874E00ACE369 /* CPUDiag.swift in Sources */,
 				742244CE1FEF19CC00B7C970 /* CPUState.swift in Sources */,
 				74EF60DA201F10DB00FA0D79 /* Opcode.swift in Sources */,
 				745B181D2024866E00ACE369 /* ROM.swift in Sources */,

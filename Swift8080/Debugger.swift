@@ -8,8 +8,8 @@
 
 import Foundation
 
-let debug = true
-let skipNOP = true
+var debug = false
+var skipNOP = false
 
 func logDisassembly(_ opcode: Opcode) {
   if !debug { return }

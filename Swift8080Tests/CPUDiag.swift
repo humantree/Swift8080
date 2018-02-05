@@ -6,7 +6,8 @@
 //  Copyright © 2018 humantree. All rights reserved.
 //
 
-import Foundation
+import XCTest
+@testable import Swift8080
 
 class CPUBDOS: CPU {
   internal func bdosSystemReset() {
@@ -42,9 +43,33 @@ class CPUBDOS: CPU {
   }
 }
 
-func loadCPUDiag() throws {
-  cpu = CPUBDOS()
-  programCounter = 0x0100
+// MARK: -
+class CPUDiag: XCTestCase {
+  let cpu = CPUBDOS()
 
-  try loadROM("cpudiag", withExtension: "bin", atLocation: 0x0100)
+  func testRunCPUDiag() {
+    do {
+      let directory = FileManager.default.urls(for: .documentDirectory,
+                                               in: .userDomainMask).first!
+      let logURL = directory.appendingPathComponent("console.log")
+
+      try loadROM("cpudiag", withExtension: "bin",
+                  atLocation: 0x0100,
+                  fromBundle: Bundle(for: type(of: self)))
+
+      freopen(logURL.path, "a+", stdout)
+
+      programCounter = 0x0100
+      cpu.start()
+
+      fclose(stdout)
+
+      let log = try String(contentsOf: logURL, encoding: .utf8)
+      XCTAssertTrue(log.contains("CPU IS OPERATIONAL"))
+
+      try FileManager.default.removeItem(at: logURL)
+    } catch {
+      XCTFail()
+    }
+  }
 }

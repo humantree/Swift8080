@@ -10,7 +10,6 @@ import Foundation
 
 var cpu = CPU()
 
-//try loadROM("rom")
-try loadCPUDiag()
+try loadROM("rom")
 
 cpu.start()
